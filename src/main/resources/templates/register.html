@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link type="text/css" rel="stylesheet" href="../static/css/register.css">
+    <title>Create Account</title>
+</head>
+<body>
+<div id="mainDiv">
+    <div class="mainRowsDivs" id="mainRow1">
+        <div class="firstRowHalves" id="firstRowHalf1">
+            <h4 class="firstRowItems" id="firstRowItem1">Pay My Buddy</h4>
+        </div>
+    </div>
+    <div class="mainRowsDivs" id="mainRow2">
+
+        <!--CORRECT th:action !!!!-->
+        <form name="f" th:action="@{/register}" method="post">
+            <fieldset>
+                <legend>Register with Pay My Buddy</legend>
+                <div th:if="${param.error}" class="alert alert-error">Invalid Username or Password</div>
+                <div th:if="${param.logout}" class="alert alert-success">You have been logged out</div>
+                <div><label for="username">Email</label></div>
+                <input type="text" id="username" name="email"/>
+                <div><label for="password">Password</label></div>
+                <input type="password" id="password" name="password"/>
+                <div class="form-actions">
+                    <button type="submit" class="btn">Register</button>
+                </div>
+                <!--<div class="parts" ><input class="TextBoxes" name="EmailBox" type="text" placeholder="Email"/></div><br/>
+            <div class="parts" ><input class="TextBoxes" name="Password" type="text" placeholder="Password"/></div><br/>
+            <div class="parts" ><input name="SessionKeeper" type="checkbox" />Remember me</div><br/>
+            <div class="parts" ><button  id="Button" type="button">Submit</button></div>-->
+            </fieldset>
+        </form>
+    </div>
+        <!--<div class="firstRowHalves" id="firstRowHalf2">
+            <div><h4 class="firstRowItems" id="firstRowItem2">Home</h4></div>
+            <div><h4 class="firstRowItems" id="firstRowItem3">Transfer</h4></div>
+            <div><h4 class="firstRowItems" id="firstRowItem4">Profile</h4></div>
+            <div><h4 class="firstRowItems" id="firstRowItem5">Contact</h4></div>
+            <div><h4 class="firstRowItems" id="firstRowItem6">Log off</h4></div>
+        </div>
+    </div>
+    <div class="mainRowsDivs" id="mainRow2">
+        <div><h5>Home</h5></div>
+        <div><h5>/</h5></div>
+        <div><h5>Transfer</h5></div>-->
+</div>
+</body>
+</html>

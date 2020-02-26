@@ -1,0 +1,26 @@
+body{
+    background-color: white;
+    font-family: sans-serif;
+    align-content: center;
+    max-height: 1122px;
+    overflow: scroll;
+    width: fit-content;
+}
+
+#mainDiv{
+    background-color: gray;
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+#mainRow1{
+    background-color: lightblue;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+}
+
+#mainRow2{
+    background-color: lightcoral;
+    margin: auto;
+}
