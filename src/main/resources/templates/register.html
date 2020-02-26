@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <link type="text/css" rel="stylesheet" href="../static/css/register.css">
@@ -15,7 +15,7 @@
     <div class="mainRowsDivs" id="mainRow2">
 
         <!--CORRECT th:action !!!!-->
-        <form name="f" th:action="@{/register}" method="post">
+        <form name="form" th:action="@{/login}" th:object="${user}" method="post">
             <fieldset>
                 <legend>Register with Pay My Buddy</legend>
                 <div th:if="${param.error}" class="alert alert-error">Invalid Username or Password</div>
