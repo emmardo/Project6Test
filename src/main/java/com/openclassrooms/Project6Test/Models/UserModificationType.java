@@ -22,7 +22,7 @@ public class UserModificationType {
     public UserModificationType() {
     }
 
-    public UserModificationType(String  userModificationType) {
+    public UserModificationType(String userModificationType) {
 
         this.userModificationType = userModificationType;
     }

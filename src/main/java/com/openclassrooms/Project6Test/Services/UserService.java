@@ -1,10 +1,7 @@
 package com.openclassrooms.Project6Test.Services;
 
 import com.openclassrooms.Project6Test.Models.*;
-import com.openclassrooms.Project6Test.Repositories.AccountRepository;
-import com.openclassrooms.Project6Test.Repositories.ConnectionRepository;
-import com.openclassrooms.Project6Test.Repositories.UserModificationRegisterRepository;
-import com.openclassrooms.Project6Test.Repositories.UserRepository;
+import com.openclassrooms.Project6Test.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +15,28 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private UserModificationTypeRepository userModificationTypeRepository;
+
+    @Autowired
     private AccountRepository accountRepository;
 
     @Autowired
+    private AccountTypeRepository accountTypeRepository;
+
+    @Autowired
+    private AccountStatusRepository accountStatusRepository;
+
+    @Autowired
     private ConnectionRepository connectionRepository;
+
+    @Autowired
+    private ConnectionTypeRepository connectionTypeRepository;
+
+    @Autowired
+    private TransactionTypeRepository transactionTypeRepository;
 
     @Autowired
     private UserModificationRegisterRepository userModificationRegisterRepository;
@@ -40,8 +55,10 @@ public class UserService {
 
     public void createUserByRole(String email, String password, String userRole) {
 
-        if(userAccountExistenceValidatorByEmail(email) && userRoleValidator(userRole)
+        if(userAccountInexistenceValidatorByEmail(email) && userRoleValidator(userRole)
             && (password != null || !password.isEmpty())) {
+
+            entityTypesCreator();
 
             //Create Role
             Role role = new Role(userRole);
@@ -87,7 +104,7 @@ public class UserService {
 
         User newUser = null;
 
-        if(userAccountExistenceValidatorByEmail(userEmail)) {
+        if(!userAccountInexistenceValidatorByEmail(userEmail)) {
 
             newUser = userRepository.findByEmail(userEmail);
         }
@@ -103,7 +120,7 @@ public class UserService {
 
     public void updateUsersEmailAddress(String currentEmailAddress, String password, String newEmailAddress) {
 
-        if(userAccountExistenceValidatorByEmail(currentEmailAddress)
+        if(!userAccountInexistenceValidatorByEmail(currentEmailAddress)
                 && passwordValidator(currentEmailAddress, password)) {
 
             User user = getUserByEmail(currentEmailAddress);
@@ -127,7 +144,7 @@ public class UserService {
 
     public void updateUsersPassword(String emailAddress, String currentPassword, String newPassword) {
 
-        if(userAccountExistenceValidatorByEmail(emailAddress) && passwordValidator(emailAddress, currentPassword)) {
+        if(!userAccountInexistenceValidatorByEmail(emailAddress) && passwordValidator(emailAddress, currentPassword)) {
 
             User user = getUserByEmail(emailAddress);
             user.setPassword(newPassword);
@@ -149,7 +166,7 @@ public class UserService {
 
     public void deleteUserByEmail(String userEmail, String password) {
 
-        if(userAccountExistenceValidatorByEmail(userEmail) && passwordValidator(userEmail, password)) {
+        if(!userAccountInexistenceValidatorByEmail(userEmail) && passwordValidator(userEmail, password)) {
 
             accountRepository.delete(accountRepository.findAccountByUserEmail(userEmail));
 
@@ -160,15 +177,16 @@ public class UserService {
     }
 
 
-    public boolean userAccountExistenceValidatorByEmail(String email) {
+    public boolean userAccountInexistenceValidatorByEmail(String email) {
 
-        boolean value = false;
+        boolean value = true;
 
         if(email != null || !email.isEmpty()) {
 
-            if(!userRepository.findByEmail(email).getEmail().isEmpty()) {
+            if(!userRepository.findByEmail(email).getEmail().isEmpty()
+                || userRepository.findByEmail(email).getEmail() != null) {
 
-                value = true;
+                value = false;
             }
         }
 
@@ -197,7 +215,7 @@ public class UserService {
 
         if((email != null || !email.isEmpty())
             && (password != null || !password.isEmpty())
-            && userAccountExistenceValidatorByEmail(email)) {
+            && !userAccountInexistenceValidatorByEmail(email)) {
 
             if(userRepository.findByEmail(email).getPassword().equals(password)) {
 
@@ -206,5 +224,25 @@ public class UserService {
         }
 
         return value;
+    }
+
+    public void entityTypesCreator() {
+
+        roleRepository.deleteAll();
+        userModificationTypeRepository.deleteAll();
+        accountTypeRepository.deleteAll();
+        accountStatusRepository.deleteAll();
+        connectionTypeRepository.deleteAll();
+        transactionTypeRepository.deleteAll();
+
+        roleRepository.saveAll(Arrays.asList(new Role("Company"), new Role("Admin"), new Role("Regular")));
+        userModificationTypeRepository.saveAll(
+                Arrays.asList(new UserModificationType("Email"), new UserModificationType("Password")));
+        accountTypeRepository.saveAll(Arrays.asList(new AccountType("Regular"), new AccountType("Company")));
+        accountStatusRepository.saveAll(Arrays.asList(new AccountStatus("Active"), new AccountStatus("Inactive"),
+                new AccountStatus("NotYetActivated"), new AccountStatus("Deactivated")));
+        connectionTypeRepository.saveAll(Arrays.asList(new ConnectionType("Regular"), new ConnectionType("Company")));
+        transactionTypeRepository.saveAll(Arrays.asList(new TransactionType("Regular"), new TransactionType("TopUp"),
+                new TransactionType("Withdrawal")));
     }
 }

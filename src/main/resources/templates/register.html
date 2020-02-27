@@ -15,15 +15,15 @@
     <div class="mainRowsDivs" id="mainRow2">
 
         <!--CORRECT th:action !!!!-->
-        <form name="form" th:action="@{/login}" th:object="${user}" method="post">
+        <form name="form" th:action="@{/}" th:object="${user}" method="post">
             <fieldset>
                 <legend>Register with Pay My Buddy</legend>
                 <div th:if="${param.error}" class="alert alert-error">Invalid Username or Password</div>
                 <div th:if="${param.logout}" class="alert alert-success">You have been logged out</div>
                 <div><label for="username">Email</label></div>
-                <input type="text" id="username" name="email"/>
+                <input type="text" id="username" name="email" th:field="*{email}"/>
                 <div><label for="password">Password</label></div>
-                <input type="password" id="password" name="password"/>
+                <input type="password" id="password" name="password" th:field="*{password}"/>
                 <div class="form-actions">
                     <button type="submit" class="btn">Register</button>
                 </div>
