@@ -55,7 +55,7 @@ public class UserService {
 
     public void createUserByRole(String email, String password, String userRole) {
 
-        if(userAccountInexistenceValidatorByEmail(email) && userRoleValidator(userRole)
+        if(!userAccountExistenceValidatorByEmail(email) && userRoleValidator(userRole)
             && (password != null || !password.isEmpty())) {
 
             entityTypesCreator();
@@ -70,8 +70,6 @@ public class UserService {
             //Create Date and Assign it to the Created User
             Date date = new Date();
             user.setCreatedAt(date);
-
-            userRepository.save(user);
 
             if(userRole != "Admin") {
 
@@ -97,6 +95,7 @@ public class UserService {
 
                 accountRepository.save(account);
             }
+            userRepository.save(user);
         }
     }
 
@@ -104,7 +103,7 @@ public class UserService {
 
         User newUser = null;
 
-        if(!userAccountInexistenceValidatorByEmail(userEmail)) {
+        if(userAccountExistenceValidatorByEmail(userEmail)) {
 
             newUser = userRepository.findByEmail(userEmail);
         }
@@ -120,7 +119,7 @@ public class UserService {
 
     public void updateUsersEmailAddress(String currentEmailAddress, String password, String newEmailAddress) {
 
-        if(!userAccountInexistenceValidatorByEmail(currentEmailAddress)
+        if(userAccountExistenceValidatorByEmail(currentEmailAddress)
                 && passwordValidator(currentEmailAddress, password)) {
 
             User user = getUserByEmail(currentEmailAddress);
@@ -144,7 +143,7 @@ public class UserService {
 
     public void updateUsersPassword(String emailAddress, String currentPassword, String newPassword) {
 
-        if(!userAccountInexistenceValidatorByEmail(emailAddress) && passwordValidator(emailAddress, currentPassword)) {
+        if(userAccountExistenceValidatorByEmail(emailAddress) && passwordValidator(emailAddress, currentPassword)) {
 
             User user = getUserByEmail(emailAddress);
             user.setPassword(newPassword);
@@ -166,7 +165,7 @@ public class UserService {
 
     public void deleteUserByEmail(String userEmail, String password) {
 
-        if(!userAccountInexistenceValidatorByEmail(userEmail) && passwordValidator(userEmail, password)) {
+        if(userAccountExistenceValidatorByEmail(userEmail) && passwordValidator(userEmail, password)) {
 
             accountRepository.delete(accountRepository.findAccountByUserEmail(userEmail));
 
@@ -177,16 +176,15 @@ public class UserService {
     }
 
 
-    public boolean userAccountInexistenceValidatorByEmail(String email) {
+    public boolean userAccountExistenceValidatorByEmail(String email) {
 
-        boolean value = true;
+        boolean value = false;
 
         if(email != null || !email.isEmpty()) {
 
-            if(!userRepository.findByEmail(email).getEmail().isEmpty()
-                || userRepository.findByEmail(email).getEmail() != null) {
+            if(userRepository.findByEmail(email)!= null) {
 
-                value = false;
+                value = true;
             }
         }
 
@@ -215,7 +213,7 @@ public class UserService {
 
         if((email != null || !email.isEmpty())
             && (password != null || !password.isEmpty())
-            && !userAccountInexistenceValidatorByEmail(email)) {
+            && userAccountExistenceValidatorByEmail(email)) {
 
             if(userRepository.findByEmail(email).getPassword().equals(password)) {
 

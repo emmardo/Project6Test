@@ -35,7 +35,7 @@ body{
 }
 
 #firstRowHalf2{
-    background-color: blue;
+    background-color: orange;
     display: flex;
     flex-flow: row nowrap;
 }

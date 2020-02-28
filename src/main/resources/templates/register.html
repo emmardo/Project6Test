@@ -15,7 +15,7 @@
     <div class="mainRowsDivs" id="mainRow2">
 
         <!--CORRECT th:action !!!!-->
-        <form name="form" th:action="@{/}" th:object="${user}" method="post">
+        <form name="form" th:action="@{/register}" th:object="${user}" method="post">
             <fieldset>
                 <legend>Register with Pay My Buddy</legend>
                 <div th:if="${param.error}" class="alert alert-error">Invalid Username or Password</div>
