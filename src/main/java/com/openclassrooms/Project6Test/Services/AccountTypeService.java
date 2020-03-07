@@ -10,8 +10,14 @@ import java.util.List;
 @Service
 public class AccountTypeService {
 
-    @Autowired
+
     private AccountTypeRepository accountTypeRepository;
+
+    @Autowired
+    public AccountTypeService(AccountTypeRepository accountTypeRepository) {
+
+        this.accountTypeRepository = accountTypeRepository;
+    }
 
 
     public void createAccountTypes(List<String> accountTypesList) {

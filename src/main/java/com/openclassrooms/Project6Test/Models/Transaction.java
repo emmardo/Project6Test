@@ -16,17 +16,17 @@ public class Transaction {
     @Column(name = "transaction_id")
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_transaction_type_id")
     /*@Column(name = "fk_transaction_type_id")*/
     private TransactionType transactionType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_account_id")
     /*@Column(name = "fk_account_id")*/
     private Account account;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_connection_id")
     /*@Column(name = "fk_connection_id")*/
     private Connection connection;

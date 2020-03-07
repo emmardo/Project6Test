@@ -15,7 +15,7 @@ public class Connection {
     @Column(name = "connection_id")
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_connection_type_id")
     /*@Column(name = "fk_connection_type_id")*/
     private ConnectionType connectionType;

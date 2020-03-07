@@ -14,11 +14,17 @@ import java.util.Date;
 public class UserModificationRegisterService {
 
 
-    @Autowired
+    private UserRepository userRepository;
+
     private UserModificationRegisterRepository userModificationRegisterRepository;
 
+
     @Autowired
-    private UserRepository userRepository;
+    public UserModificationRegisterService(UserRepository userRepository, UserModificationRegisterRepository userModificationRegisterRepository) {
+
+        this.userRepository = userRepository;
+        this.userModificationRegisterRepository = userModificationRegisterRepository;
+    }
 
 
     public void createUserModificationRegister(String email, String userModificationTypeString, String previousDetails, String newDetails) {

@@ -1,10 +1,7 @@
 package com.openclassrooms.Project6Test.Services;
 
 import com.openclassrooms.Project6Test.Models.*;
-import com.openclassrooms.Project6Test.Repositories.AccountRepository;
-import com.openclassrooms.Project6Test.Repositories.ConnectionRepository;
-import com.openclassrooms.Project6Test.Repositories.IbanRepository;
-import com.openclassrooms.Project6Test.Repositories.TransactionRepository;
+import com.openclassrooms.Project6Test.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,25 +15,34 @@ import java.util.stream.Collectors;
 public class TransactionService {
 
 
-    @Autowired
     private TransactionRepository transactionRepository;
 
-    @Autowired
+    private TransactionTypeRepository transactionTypeRepository;
+
     private AccountRepository accountRepository;
 
-    @Autowired
     private ConnectionRepository connectionRepository;
 
-    @Autowired
     private IbanRepository ibanRepository;
 
     //SET COMPANY'S ACCOUNT EMAIL!!!
-    String companysEmail;
+    String companysEmail = "";
 
     //FEE SET TO 0.5% AS FLOAT!!!
     float feeCostInPercentage = 0.5f;
     float feeCalculationFactor = feeCostInPercentage/100;
 
+    @Autowired
+    public TransactionService(TransactionRepository transactionRepository,
+                              TransactionTypeRepository transactionTypeRepository, AccountRepository accountRepository,
+                              ConnectionRepository connectionRepository, IbanRepository ibanRepository) {
+
+        this.transactionRepository = transactionRepository;
+        this.transactionTypeRepository = transactionTypeRepository;
+        this.accountRepository = accountRepository;
+        this.connectionRepository = connectionRepository;
+        this.ibanRepository = ibanRepository;
+    }
 
     public void createTransactionByTransactionType(String transactionTypeString, String sendersEmail,
                                                    float moneyAmount, String receiversEmailOrIbanOrOrigin) {
@@ -45,11 +51,13 @@ public class TransactionService {
                 receiversEmailOrIbanOrOrigin)){
 
             Account sendersAccount = accountRepository.findAccountByUserEmail(sendersEmail);
+
             float sendersBalanceBeforeTransaction = sendersAccount.getCurrentBalance();
 
             Date madeAt = new Date();
 
-            TransactionType transactionType = new TransactionType(transactionTypeString);
+            TransactionType transactionType = transactionTypeRepository
+                                                .findTransactionTypeByTransactionType(transactionTypeString);
 
             Transaction newTransaction = new Transaction(transactionType, sendersAccount, moneyAmount, madeAt);
             newTransaction.setSendersBalanceBeforeTransaction(sendersBalanceBeforeTransaction);
@@ -92,14 +100,21 @@ public class TransactionService {
 
             }else if(transactionTypeString.equals("Withdrawal")) {
 
-                newTransaction.setIban(new Iban(sendersAccount, receiversEmailOrIbanOrOrigin));
-
                 if(ibanRepository.findByAccount_UserEmail(sendersEmail).stream()
                         .noneMatch(i -> i.getIban().equals(receiversEmailOrIbanOrOrigin))) {
 
                     Iban newIban = new Iban(sendersAccount, receiversEmailOrIbanOrOrigin);
 
+                    newTransaction.setIban(newIban);
+
                     ibanRepository.save(newIban);
+
+                }else{
+
+                    Iban iban = ibanRepository.findByAccount_UserEmail(sendersEmail).stream()
+                                .filter(i -> i.getIban().equals(receiversEmailOrIbanOrOrigin)).findFirst().get();
+
+                    newTransaction.setIban(iban);
                 }
             }
             transactionRepository.save(newTransaction);

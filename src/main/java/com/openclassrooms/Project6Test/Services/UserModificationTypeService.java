@@ -10,8 +10,15 @@ import java.util.List;
 @Service
 public class UserModificationTypeService {
 
-    @Autowired
+
     private UserModificationTypeRepository userModificationTypeRepository;
+
+
+    @Autowired
+    public UserModificationTypeService(UserModificationTypeRepository userModificationTypeRepository) {
+
+        this.userModificationTypeRepository = userModificationTypeRepository;
+    }
 
 
     public void createUserModificationTypes(List<String> userModificationTypeList) {

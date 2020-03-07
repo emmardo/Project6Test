@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @RestController
+@RequestMapping("/")
 public class HomeController {
 
     @Autowired
@@ -33,10 +34,13 @@ public class HomeController {
     }
 
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute("user")User user) {
+    public ModelAndView registerUser(@ModelAttribute("user")User user) {
 
         userService.createUserByRole(user.getEmail(), user.getPassword(), "Regular");
 
-        return "redirect:/";
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("login");
+
+        return modelAndView;
     }
 }

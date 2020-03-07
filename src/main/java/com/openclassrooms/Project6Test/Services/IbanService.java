@@ -12,12 +12,17 @@ import java.util.List;
 @Service
 public class IbanService {
 
-    @Autowired
+    private AccountRepository accountRepository;
+
     private IbanRepository ibanRepository;
 
-    @Autowired
-    AccountRepository accountRepository;
 
+    @Autowired
+    public IbanService(AccountRepository accountRepository, IbanRepository ibanRepository) {
+
+        this.accountRepository = accountRepository;
+        this.ibanRepository = ibanRepository;
+    }
 
     public void createIban(String email, String iban) {
 

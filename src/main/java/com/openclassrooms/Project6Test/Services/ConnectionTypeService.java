@@ -10,8 +10,14 @@ import java.util.List;
 @Service
 public class ConnectionTypeService {
 
-    @Autowired
+
     private ConnectionTypeRepository connectionTypeRepository;
+
+    @Autowired
+    public ConnectionTypeService(ConnectionTypeRepository connectionTypeRepository) {
+
+        this.connectionTypeRepository = connectionTypeRepository;
+    }
 
 
     public void createConnectionTypes(List<String> connectionTypeList) {

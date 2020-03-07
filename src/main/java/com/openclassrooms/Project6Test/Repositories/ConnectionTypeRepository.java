@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ConnectionTypeRepository extends JpaRepository<ConnectionType, Integer> {
 
-    /*ConnectionType findConnectionTypeById(int id);
+    /*ConnectionType findConnectionTypeById(int id);*/
 
-    ConnectionType findConnectionTypeByConnectionType(String connectiontype);*/
+    ConnectionType findConnectionTypeByConnectionType(String connectiontype);
 }

@@ -22,12 +22,12 @@ public class Account {
     /*@Column(name = "fk_user_id")*/
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_account_type_id")
     /*@Column(name = "fk_account_type_id")*/
     private AccountType accountType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_account_status_id")
     /*@Column(name = "fk_account_status_id")*/
     private AccountStatus accountStatus;
@@ -41,10 +41,10 @@ public class Account {
     /*@Column(name = "current_balance")*/
     private float currentBalance;
 
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private List<Transaction> transactions;
 
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private List<Iban> ibans;
 
     public Account() {

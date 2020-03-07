@@ -11,44 +11,45 @@ import java.util.Date;
 @Service
 public class UserService {
 
-    @Autowired
     private UserRepository userRepository;
 
-    @Autowired
     private RoleRepository roleRepository;
 
-    @Autowired
     private UserModificationTypeRepository userModificationTypeRepository;
 
-    @Autowired
     private AccountRepository accountRepository;
 
-    @Autowired
     private AccountTypeRepository accountTypeRepository;
 
-    @Autowired
     private AccountStatusRepository accountStatusRepository;
 
-    @Autowired
     private ConnectionRepository connectionRepository;
 
-    @Autowired
     private ConnectionTypeRepository connectionTypeRepository;
 
-    @Autowired
     private TransactionTypeRepository transactionTypeRepository;
 
-    @Autowired
     private UserModificationRegisterRepository userModificationRegisterRepository;
 
 
-    public UserService(UserRepository userRepository, AccountRepository accountRepository,
-                       ConnectionRepository connectionRepository,
+    @Autowired
+    public UserService(UserRepository userRepository, RoleRepository roleRepository,
+                       UserModificationTypeRepository userModificationTypeRepository,
+                       AccountRepository accountRepository, AccountTypeRepository accountTypeRepository,
+                       AccountStatusRepository accountStatusRepository, ConnectionRepository connectionRepository,
+                       ConnectionTypeRepository connectionTypeRepository,
+                       TransactionTypeRepository transactionTypeRepository,
                        UserModificationRegisterRepository userModificationRegisterRepository) {
 
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.userModificationTypeRepository = userModificationTypeRepository;
         this.accountRepository = accountRepository;
+        this.accountTypeRepository = accountTypeRepository;
+        this.accountStatusRepository = accountStatusRepository;
         this.connectionRepository = connectionRepository;
+        this.connectionTypeRepository = connectionTypeRepository;
+        this.transactionTypeRepository = transactionTypeRepository;
         this.userModificationRegisterRepository = userModificationRegisterRepository;
     }
 
@@ -58,22 +59,24 @@ public class UserService {
         if(!userAccountExistenceValidatorByEmail(email) && userRoleValidator(userRole)
             && (password != null || !password.isEmpty())) {
 
-            entityTypesCreator();
+            entityTypesExistenceChecker();
 
-            //Create Role
-            Role role = new Role(userRole);
+            /*//Create Role
+            Role role = new Role(roleRepository.findRoleByRole(userRole).getRole());*/
 
             //Create User and Assign Email, Password and Role to it
             User user;
-            user = new User(email, password, role);
+            user = new User(email, password, roleRepository.findRoleByRole(userRole));
 
             //Create Date and Assign it to the Created User
             Date date = new Date();
             user.setCreatedAt(date);
 
+            userRepository.save(user);
+
             if(userRole != "Admin") {
 
-                //Create AccountType
+                /*//Create AccountType
                 String accountTypeString = userRole;
                 AccountType accountType = new AccountType(accountTypeString);
 
@@ -83,19 +86,23 @@ public class UserService {
 
                 //Create ConnectionType
                 String connectionTypeString = userRole;
-                ConnectionType connectionType = new ConnectionType(connectionTypeString);
+                ConnectionType connectionType = new ConnectionType(connectionTypeString);*/
 
                 //Create Connection
-                Connection connection = new Connection(connectionType, user);
+                Connection connection = new Connection(
+                                                connectionTypeRepository.findConnectionTypeByConnectionType(userRole),
+                                                user);
 
                 //Create Account and Assign it a Balance of 0£
-                Account account = new Account(user, accountType, accountStatus, connection, 0);
+                Account account = new Account(user, accountTypeRepository.findAccountTypeByAccountType(userRole),
+                                        accountStatusRepository.findAccountStatusByAccountStatus("Active"), connection,
+                                        0);
 
                 connectionRepository.save(connection);
 
                 accountRepository.save(account);
             }
-            userRepository.save(user);
+
         }
     }
 
@@ -130,7 +137,8 @@ public class UserService {
 
             userRepository.save(user);
 
-            UserModificationType userModificationType = new UserModificationType("Email");
+            UserModificationType userModificationType = userModificationTypeRepository
+                                                        .findUserModificationTypeByUserModificationType("Email");
 
             UserModificationRegister userModificationRegister = new UserModificationRegister
                                                                     (user, userModificationType, date);
@@ -153,7 +161,8 @@ public class UserService {
 
             userRepository.save(user);
 
-            UserModificationType userModificationType = new UserModificationType("Password");
+            UserModificationType userModificationType = userModificationTypeRepository
+                                                        .findUserModificationTypeByUserModificationType("Password");
 
             UserModificationRegister userModificationRegister = new UserModificationRegister
                                                                     (user, userModificationType, date);
@@ -224,23 +233,40 @@ public class UserService {
         return value;
     }
 
-    public void entityTypesCreator() {
+    public void entityTypesExistenceChecker() {
 
-        roleRepository.deleteAll();
-        userModificationTypeRepository.deleteAll();
-        accountTypeRepository.deleteAll();
-        accountStatusRepository.deleteAll();
-        connectionTypeRepository.deleteAll();
-        transactionTypeRepository.deleteAll();
+        if(roleRepository.findAll().isEmpty()){
 
-        roleRepository.saveAll(Arrays.asList(new Role("Company"), new Role("Admin"), new Role("Regular")));
-        userModificationTypeRepository.saveAll(
-                Arrays.asList(new UserModificationType("Email"), new UserModificationType("Password")));
-        accountTypeRepository.saveAll(Arrays.asList(new AccountType("Regular"), new AccountType("Company")));
-        accountStatusRepository.saveAll(Arrays.asList(new AccountStatus("Active"), new AccountStatus("Inactive"),
-                new AccountStatus("NotYetActivated"), new AccountStatus("Deactivated")));
-        connectionTypeRepository.saveAll(Arrays.asList(new ConnectionType("Regular"), new ConnectionType("Company")));
-        transactionTypeRepository.saveAll(Arrays.asList(new TransactionType("Regular"), new TransactionType("TopUp"),
-                new TransactionType("Withdrawal")));
+            roleRepository.saveAll(Arrays.asList(new Role("Company"), new Role("Admin"), new Role("Regular")));
+        }
+
+        if(userModificationTypeRepository.findAll().isEmpty()){
+
+            userModificationTypeRepository.saveAll(
+                    Arrays.asList(new UserModificationType("Email"), new UserModificationType("Password")));
+        }
+
+        if(accountTypeRepository.findAll().isEmpty()){
+
+            accountTypeRepository.saveAll(Arrays.asList(new AccountType("Regular"), new AccountType("Company")));
+        }
+
+        if(accountStatusRepository.findAll().isEmpty()){
+
+            accountStatusRepository.saveAll(Arrays.asList(new AccountStatus("Active"), new AccountStatus("Inactive"),
+                    new AccountStatus("NotYetActivated"), new AccountStatus("Deactivated")));
+        }
+
+        if(connectionTypeRepository.findAll().isEmpty()){
+
+            connectionTypeRepository.saveAll(Arrays.asList(new ConnectionType("Regular"),
+                    new ConnectionType("Company")));
+        }
+
+        if(transactionTypeRepository.findAll().isEmpty()){
+
+            transactionTypeRepository.saveAll(Arrays.asList(new TransactionType("Regular"), new TransactionType("TopUp"),
+                    new TransactionType("Withdrawal")));
+        }
     }
 }

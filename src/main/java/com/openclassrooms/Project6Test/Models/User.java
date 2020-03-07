@@ -20,7 +20,7 @@ public class User {
     @Column(name = "user_id")
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_role_id")
     /*@Column(name = "fk_role_id")*/
     private Role role;
@@ -41,15 +41,15 @@ public class User {
     @LastModifiedDate
     private Date updatedAt;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserModificationRegister> userModificationRegisters;
 
     //changed mapped from "account"
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Account account;
 
     //changed mapped from "connection"
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Connection connection;
 
     public User() {

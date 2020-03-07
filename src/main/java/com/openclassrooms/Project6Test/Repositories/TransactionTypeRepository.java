@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TransactionTypeRepository extends JpaRepository<TransactionType, Integer> {
 
-    /*TransactionType findTransactionTypeById(int id);
+    /*TransactionType findTransactionTypeById(int id);*/
 
-    TransactionType findTransactionTypeByTransactionType(String transactionType);*/
+    TransactionType findTransactionTypeByTransactionType(String transactionType);
 }

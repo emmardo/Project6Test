@@ -10,8 +10,14 @@ import java.util.List;
 @Service
 public class AccountStatusService {
 
-    @Autowired
     private AccountStatusRepository accountStatusRepository;
+
+
+    @Autowired
+    public AccountStatusService(AccountStatusRepository accountStatusRepository) {
+
+        this.accountStatusRepository = accountStatusRepository;
+    }
 
 
     public void createAccountStatusTypes(List<String> accountStatusList) {

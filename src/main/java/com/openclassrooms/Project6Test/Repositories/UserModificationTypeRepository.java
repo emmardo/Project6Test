@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserModificationTypeRepository extends JpaRepository<UserModificationType, Integer> {
 
-    /*UserModificationType findUserModificationTypeById(int id);
+    /*UserModificationType findUserModificationTypeById(int id);*/
 
-    UserModificationType findUserModificationTypeByUserModificationType(String userModificationType);*/
+    UserModificationType findUserModificationTypeByUserModificationType(String userModificationType);
 }
