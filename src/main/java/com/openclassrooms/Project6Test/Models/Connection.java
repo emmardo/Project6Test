@@ -28,6 +28,9 @@ public class Connection {
     @OneToMany(mappedBy = "connection")
     private List<Transaction> transactions;
 
+    @OneToMany(mappedBy = "connection")
+    private List<ConnectionListElement> connectionListElements;
+
     public Connection() {
     }
 
@@ -67,5 +70,13 @@ public class Connection {
 
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
+    }
+
+    public List<ConnectionListElement> getConnectionListElements() {
+        return connectionListElements;
+    }
+
+    public void setConnectionListElements(List<ConnectionListElement> connectionListElements) {
+        this.connectionListElements = connectionListElements;
     }
 }

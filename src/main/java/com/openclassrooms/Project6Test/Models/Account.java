@@ -47,6 +47,9 @@ public class Account {
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private List<Iban> ibans;
 
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+    private List<ConnectionListElement> connectionListElements;
+
     public Account() {
     }
 
@@ -121,5 +124,13 @@ public class Account {
 
     public void setIbans(List<Iban> ibans) {
         this.ibans = ibans;
+    }
+
+    public List<ConnectionListElement> getConnectionListElements() {
+        return connectionListElements;
+    }
+
+    public void setConnectionListElements(List<ConnectionListElement> connectionListElements) {
+        this.connectionListElements = connectionListElements;
     }
 }
