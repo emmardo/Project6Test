@@ -33,7 +33,7 @@ body{
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
-    margin-right: 40px;
+    margin-right: 20px;
 }
 
 #registerLink{
@@ -70,4 +70,16 @@ fieldset{
     flex-flow: column nowrap;
     align-items: center;
     margin-top: 100px;
+}
+
+#secondRowDiv{
+    display: flex;
+    flex-flow: row nowrap;
+    width: 100%;
+    align-items: start;
+    margin-left: 20px;
+}
+
+.secondRowItems{
+    margin-left: 20px;
 }

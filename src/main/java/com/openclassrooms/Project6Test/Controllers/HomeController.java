@@ -1,6 +1,9 @@
 package com.openclassrooms.Project6Test.Controllers;
 
+import com.openclassrooms.Project6Test.Models.ConnectionListElement;
 import com.openclassrooms.Project6Test.Models.User;
+import com.openclassrooms.Project6Test.Services.ConnectionListElementService;
+import com.openclassrooms.Project6Test.Services.ConnectionService;
 import com.openclassrooms.Project6Test.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +14,18 @@ import org.springframework.web.servlet.view.RedirectView;
 @RequestMapping("/")
 public class HomeController {
 
+    private UserService userService;
+    private ConnectionService connectionService;
+    private ConnectionListElementService connectionListElementService;
+
     @Autowired
-    UserService userService;
+    public HomeController(UserService userService, ConnectionService connectionService,
+                          ConnectionListElementService connectionListElementService) {
+
+        this.userService = userService;
+        this.connectionService = connectionService;
+        this.connectionListElementService = connectionListElementService;
+    }
 
     @ModelAttribute
     private User setupForm() {
@@ -41,6 +54,20 @@ public class HomeController {
 
         RedirectView redirectView = new RedirectView();
         redirectView.setUrl("/login");
+
+        return new ModelAndView(redirectView);
+    }
+
+    @PostMapping("/addConnection")
+    public ModelAndView addConnection(@ModelAttribute("ConnectionEmail")String connectionEmail) {
+
+        if(connectionService.getConnectionByEmail(connectionEmail) != null) {
+
+            /*connectionListElementService.createConnectionListElement();*/
+        };
+
+        RedirectView redirectView = new RedirectView();
+        redirectView.setUrl("/addConnection");
 
         return new ModelAndView(redirectView);
     }

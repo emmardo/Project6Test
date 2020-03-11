@@ -9,9 +9,9 @@ import org.springframework.web.servlet.ModelAndView;
 @RestController
 public class UserController {
 
-    @Autowired
     private UserService userService;
 
+    @Autowired
     public UserController(UserService userService) {
 
         this.userService = userService;

@@ -17,7 +17,7 @@ public class ConnectionService {
         this.connectionRepository = connectionRepository;
     }
 
-    private Connection getConnectionByEmail(String email) {
+    public Connection getConnectionByEmail(String email) {
 
         return connectionRepository.findConnectionByUserEmail(email);
     }
