@@ -2,14 +2,14 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link type="text/css" rel="stylesheet" href="../static/css/addConnection.css">
+    <link type="text/css" rel="stylesheet" th:href="@{/css/addConnection.css}" href="../static/css/addConnection.css">
     <title>Add Connection</title>
 </head>
 <body>
 <div id="mainDiv">
     <div class="mainRowsDivs" id="mainRow1">
-        <div class="firstRowHalves" id="firstRowHalf1">
-            <h4 class="firstRowItems" id="firstRowItem1">Pay My Buddy</h4>
+        <div class="headerRowDivs" id="iconDiv">
+            <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}" title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
         </div>
         <div class="firstRowHalves" id="firstRowHalf2">
             <div><h4 class="firstRowItems" id="firstRowItem2">Home</h4></div>

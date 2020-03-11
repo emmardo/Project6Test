@@ -5,6 +5,7 @@ body{
     max-height: 1122px;
     overflow: scroll;
     width: fit-content;
+    margin: 0px;
 }
 
 #mainDiv{
@@ -38,4 +39,10 @@ body{
     background-color: blue;
     display: flex;
     flex-flow: row nowrap;
+    align-items: center;
+    margin-right: 40px;
+}
+
+.firstRowItems {
+    margin-right: 30px;
 }

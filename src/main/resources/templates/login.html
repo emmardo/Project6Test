@@ -2,50 +2,27 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link type="text/css" rel="stylesheet" href="../static/css/login.css">
+    <link type="text/css" rel="stylesheet" th:href="@{/css/style.css}" href="../static/css/style.css">
     <title>Login Page</title>
 </head>
 <body>
 <div id="mainDiv">
-    <div class="mainRowsDivs" id="mainRow1">
-        <div class="firstRowHalves" id="firstRowHalf1">
-            <h4 class="firstRowItems" id="firstRowItem1">Pay My Buddy</h4>
-        </div>
-    </div>
-    <div class="mainRowsDivs" id="mainRow2">
-
-        <!--CORRECT th:action !!!!-->
-        <form name="f" th:action="@{/login}" method="post">
+    <div class="mainDivRows" id="formRowDiv">
+        <form name="form" th:action="@{/login}" th:object="${user}" method="post">
             <fieldset>
-                <legend>Login to Pay My Buddy</legend>
+                <div class="headerRowDivs" id="iconDiv">
+                    <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}" title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
+                </div>
                 <div th:if="${param.error}" class="alert alert-error">Invalid Username or Password</div>
                 <div th:if="${param.logout}" class="alert alert-success">You have been logged out</div>
-                <div><label for="username">Email</label></div>
-                <input type="text" id="username" name="email"/>
-                <div><label for="password">Password</label></div>
-                <input type="password" id="password" name="password"/>
+                <div><input type="text" id="username" name="email" th:field="*{email}" placeholder="Email"/></div>
+                <div><input type="password" id="password" name="password" th:field="*{password}" placeholder="Password"/></div>
                 <div class="form-actions">
-                    <button type="submit" class="btn">Log In</button>
+                    <button type="submit" class="btn">Login</button>
                 </div>
-                <!--<div class="parts" ><input class="TextBoxes" name="EmailBox" type="text" placeholder="Email"/></div><br/>
-            <div class="parts" ><input class="TextBoxes" name="Password" type="text" placeholder="Password"/></div><br/>
-            <div class="parts" ><input name="SessionKeeper" type="checkbox" />Remember me</div><br/>
-            <div class="parts" ><button  id="Button" type="button">Submit</button></div>-->
             </fieldset>
         </form>
     </div>
-    <!--<div class="firstRowHalves" id="firstRowHalf2">
-        <div><h4 class="firstRowItems" id="firstRowItem2">Home</h4></div>
-        <div><h4 class="firstRowItems" id="firstRowItem3">Transfer</h4></div>
-        <div><h4 class="firstRowItems" id="firstRowItem4">Profile</h4></div>
-        <div><h4 class="firstRowItems" id="firstRowItem5">Contact</h4></div>
-        <div><h4 class="firstRowItems" id="firstRowItem6">Log off</h4></div>
-    </div>
-</div>
-<div class="mainRowsDivs" id="mainRow2">
-    <div><h5>Home</h5></div>
-    <div><h5>/</h5></div>
-    <div><h5>Transfer</h5></div>-->
 </div>
 </body>
 </html>

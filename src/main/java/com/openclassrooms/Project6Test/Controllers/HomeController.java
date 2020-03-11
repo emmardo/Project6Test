@@ -5,6 +5,7 @@ import com.openclassrooms.Project6Test.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 @RequestMapping("/")
@@ -38,9 +39,9 @@ public class HomeController {
 
         userService.createUserByRole(user.getEmail(), user.getPassword(), "Regular");
 
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("login");
+        RedirectView redirectView = new RedirectView();
+        redirectView.setUrl("/login");
 
-        return modelAndView;
+        return new ModelAndView(redirectView);
     }
 }

@@ -2,33 +2,23 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link type="text/css" rel="stylesheet" th:href="@{/css/home.css}">
+    <link type="text/css" rel="stylesheet" th:href="@{/css/style.css} "href="../static/css/style.css">
     <title >Home</title>
 </head>
 <body>
 <div id="mainDiv">
-    <div class="mainRowsDivs" id="mainRow1">
-        <div class="firstRowHalves" id="firstRowHalf1">
-            <h4 class="firstRowItems" id="firstRowItem1">Pay My Buddy</h4>
+    <div class="mainDivRows" id="headerRowDiv">
+        <div class="headerRowDivs" id="iconDiv">
+            <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}" title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
         </div>
-        <div class="firstRowHalves" id="firstRowHalf2">
-            <div><a href="/register" class="firstRowItems" id="firstRowItem2">REGISTER</a></div>
-            <div><a href="/login" class="firstRowItems" id="firstRowItem3">Login</a></div>
-            <!--<div><h4 class="firstRowItems" id="firstRowItem2">Home</h4></div>
-            <div><h4 class="firstRowItems" id="firstRowItem3">Transfer</h4></div>
-            <div><h4 class="firstRowItems" id="firstRowItem4">Profile</h4></div>
-            <div><h4 class="firstRowItems" id="firstRowItem5">Contact</h4></div>
-            <div><h4 class="firstRowItems" id="firstRowItem6">Log off</h4></div>-->
+        <div class="headerRowDivs" id="linksDiv">
+            <div><a href="/register" class="linksDivs" id="registerLink">REGISTER</a></div>
+            <div><a href="/login" class="linksDivs" id="loginLink">Login</a></div>
         </div>
     </div>
-    <!--<div class="mainRowsDivs" id="mainRow2">
-        <div><h5>Home</h5></div>
-        <div><h5>/</h5></div>
-        <div><h5>Transfer</h5></div>
-    </div>-->
-    <div class="mainRowsDivs" id="mainRow3">
-        <div id="image" >
-            <img th:src="@{/img/project6Background.jpg}" title="Pay My Buddy Home Page Background" alt="Home Page Background">
+    <div class="mainDivRows" id="homePageBackgroundDiv">
+        <div id="imageDiv" >
+            <img id="image" src="../static/img/project6Background.jpg" th:src="@{/img/project6Background.jpg}" title="Pay My Buddy Home Page Background" alt="Home Page Background">
         </div>
     </div>
 </div>

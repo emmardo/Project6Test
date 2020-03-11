@@ -2,16 +2,16 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link type="text/css" rel="stylesheet" href="../static/css/transferPage.css">
+    <link type="text/css" rel="stylesheet" th:href="@{/css/style.css}" href="../static/css/style.css.css">
     <title>Transfer</title>
 </head>
 <body>
 <div id="mainDiv">
-    <div class="mainRowsDivs" id="mainRow1">
-        <div class="firstRowHalves" id="firstRowHalf1">
-            <h4 class="firstRowItems" id="firstRowItem1">Pay My Buddy</h4>
+    <div class="mainDivRows" id="headerRowDiv">
+        <div class="headerRowDivs" id="iconDiv">
+            <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}" title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
         </div>
-        <div class="firstRowHalves" id="firstRowHalf2">
+        <div class="headerRowDivs" id="linksDiv">
             <div><h4 class="firstRowItems" id="firstRowItem2">Home</h4></div>
             <div><h4 class="firstRowItems" id="firstRowItem3">Transfer</h4></div>
             <div><h4 class="firstRowItems" id="firstRowItem4">Profile</h4></div>
@@ -19,12 +19,12 @@
             <div><h4 class="firstRowItems" id="firstRowItem6">Log off</h4></div>
         </div>
     </div>
-    <div class="mainRowsDivs" id="mainRow2">
+    <div class="mainDivRows" id="secondRowDiv">
         <div><h5>Home</h5></div>
         <div><h5>/</h5></div>
         <div><h5>Transfer</h5></div>
     </div>
-    <div class="mainRowsDivs" id="mainRow3">
+    <div class="mainDivRows" id="mainRowDiv">
         <div class="subRowsDivs" id="subRow1">
             <div><h4>Send Money</h4></div>
             <div><button name="connectionButton" type="submit" value="Add Connection">Add Connection</button></div>
