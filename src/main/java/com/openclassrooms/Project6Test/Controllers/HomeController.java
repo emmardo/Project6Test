@@ -58,6 +58,17 @@ public class HomeController {
         return new ModelAndView(redirectView);
     }
 
+    @PostMapping("/login")
+    public ModelAndView loginUser(@ModelAttribute("user")User user) {
+
+        userService.createUserByRole(user.getEmail(), user.getPassword(), "Regular");
+
+        RedirectView redirectView = new RedirectView();
+        redirectView.setUrl("/login");
+
+        return new ModelAndView(redirectView);
+    }
+
     @PostMapping("/addConnection")
     public ModelAndView addConnection(@ModelAttribute("ConnectionEmail")String connectionEmail) {
 
