@@ -22,7 +22,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     /*@Autowired
     private DataSource dataSource;*/
 
-    @Qualifier("myUserDetailsService")
     @Autowired
     UserDetailsService userDetailsService;
 
@@ -58,7 +57,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                .loginProcessingUrl("/login")
+                /*.loginProcessingUrl("/login")*/
                 .defaultSuccessUrl("/profile",true)
                 .failureUrl("/login.html?error=true");
     }

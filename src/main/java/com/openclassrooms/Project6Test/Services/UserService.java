@@ -112,7 +112,7 @@ public class UserService {
 
         if(userAccountExistenceValidatorByEmail(userEmail)) {
 
-            newUser = userRepository.findByEmail(userEmail);
+            newUser = userRepository.findUserByEmail(userEmail);
         }
 
         return newUser;
@@ -180,7 +180,7 @@ public class UserService {
 
             connectionRepository.delete(connectionRepository.findConnectionByUserEmail(userEmail));
 
-            userRepository.delete(userRepository.findByEmail(userEmail));
+            userRepository.delete(userRepository.findUserByEmail(userEmail));
         }
     }
 
@@ -191,7 +191,7 @@ public class UserService {
 
         if(email != null || !email.isEmpty()) {
 
-            if(userRepository.findByEmail(email)!= null) {
+            if(userRepository.findUserByEmail(email)!= null) {
 
                 value = true;
             }
@@ -224,7 +224,7 @@ public class UserService {
             && (password != null || !password.isEmpty())
             && userAccountExistenceValidatorByEmail(email)) {
 
-            if(userRepository.findByEmail(email).getPassword().equals(password)) {
+            if(userRepository.findUserByEmail(email).getPassword().equals(password)) {
 
                 value = true;
             }

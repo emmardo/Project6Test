@@ -6,6 +6,8 @@ import com.openclassrooms.Project6Test.Services.ConnectionListElementService;
 import com.openclassrooms.Project6Test.Services.ConnectionService;
 import com.openclassrooms.Project6Test.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
@@ -17,6 +19,9 @@ public class HomeController {
     private UserService userService;
     private ConnectionService connectionService;
     private ConnectionListElementService connectionListElementService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     public HomeController(UserService userService, ConnectionService connectionService,
@@ -50,7 +55,7 @@ public class HomeController {
     @PostMapping("/register")
     public ModelAndView registerUser(@ModelAttribute("user")User user) {
 
-        userService.createUserByRole(user.getEmail(), user.getPassword(), "Regular");
+        userService.createUserByRole(user.getEmail(), passwordEncoder.encode(user.getPassword()), "Regular");
 
         RedirectView redirectView = new RedirectView();
         redirectView.setUrl("/login");
@@ -58,10 +63,18 @@ public class HomeController {
         return new ModelAndView(redirectView);
     }
 
+    @GetMapping("/login")
+    public ModelAndView login() {
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("login");
+        return modelAndView;
+    }
+
     @PostMapping("/login")
     public ModelAndView loginUser(@ModelAttribute("user")User user) {
 
-        userService.createUserByRole(user.getEmail(), user.getPassword(), "Regular");
+
 
         RedirectView redirectView = new RedirectView();
         redirectView.setUrl("/login");

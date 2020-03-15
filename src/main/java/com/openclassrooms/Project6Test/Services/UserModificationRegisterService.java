@@ -29,7 +29,7 @@ public class UserModificationRegisterService {
 
     public void createUserModificationRegister(String email, String userModificationTypeString, String previousDetails, String newDetails) {
 
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findUserByEmail(email);
 
         UserModificationType userModificationType = new UserModificationType(userModificationTypeString);
 
