@@ -71,7 +71,7 @@ public class HomeController {
         return modelAndView;
     }
 
-    @PostMapping("/login")
+    @PostMapping("/loginPost")
     public ModelAndView loginUser(@ModelAttribute("user")User user) {
 
 
