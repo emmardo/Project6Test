@@ -4,8 +4,10 @@ import com.openclassrooms.Project6Test.Models.ConnectionListElement;
 import com.openclassrooms.Project6Test.Models.User;
 import com.openclassrooms.Project6Test.Services.ConnectionListElementService;
 import com.openclassrooms.Project6Test.Services.ConnectionService;
+import com.openclassrooms.Project6Test.Services.MyUserDetailsService;
 import com.openclassrooms.Project6Test.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -19,17 +21,20 @@ public class HomeController {
     private UserService userService;
     private ConnectionService connectionService;
     private ConnectionListElementService connectionListElementService;
+    private MyUserDetailsService myUserDetailsService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     public HomeController(UserService userService, ConnectionService connectionService,
-                          ConnectionListElementService connectionListElementService) {
+                          ConnectionListElementService connectionListElementService,
+                          MyUserDetailsService myUserDetailsService) {
 
         this.userService = userService;
         this.connectionService = connectionService;
         this.connectionListElementService = connectionListElementService;
+        this.myUserDetailsService = myUserDetailsService;
     }
 
     @ModelAttribute
@@ -74,9 +79,9 @@ public class HomeController {
     @PostMapping("/loginPost")
     public ModelAndView loginUser(@ModelAttribute("user")User user) {
 
-        User newUser = userService.getUserByEmail(user.getEmail());
+        UserDetails userDetails = myUserDetailsService.loadUserByUsername(user.getEmail());
 
-        if (newUser.getPassword().equals(user.getPassword())) {
+        if (userDetails.getPassword().equals(userService.getUserByEmail(user.getEmail()).getPassword())) {
 
             RedirectView redirectView = new RedirectView();
             redirectView.setUrl("/profile");
