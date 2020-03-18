@@ -74,12 +74,29 @@ public class HomeController {
     @PostMapping("/loginPost")
     public ModelAndView loginUser(@ModelAttribute("user")User user) {
 
+        User newUser = userService.getUserByEmail(user.getEmail());
 
+        if (newUser.getPassword().equals(user.getPassword())) {
 
-        RedirectView redirectView = new RedirectView();
-        redirectView.setUrl("/login");
+            RedirectView redirectView = new RedirectView();
+            redirectView.setUrl("/profile");
 
-        return new ModelAndView(redirectView);
+            return new ModelAndView(redirectView);
+        } else {
+
+            RedirectView redirectView = new RedirectView();
+            redirectView.setUrl("/login");
+
+            return new ModelAndView(redirectView);
+        }
+    }
+
+    @GetMapping("/profile")
+    public ModelAndView profile() {
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("profile");
+        return modelAndView;
     }
 
     @PostMapping("/addConnection")

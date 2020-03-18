@@ -22,6 +22,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     /*@Autowired
     private DataSource dataSource;*/
 
+    @Qualifier("myUserDetailsService")
     @Autowired
     UserDetailsService userDetailsService;
 
@@ -47,16 +48,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/admin*").hasRole("ADMIN")
-                .antMatchers("/user*").hasAnyRole("ADMIN", "USER")
                 .antMatchers("/").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/register").permitAll()
+                .antMatchers("/admin**").hasRole("Admin")
+                .antMatchers("/user**").hasAnyRole("Admin", "Regular")
                 .and()
                 .httpBasic()
                 .and()
                 .formLogin()
                 .loginPage("/login")
+                .usernameParameter("email")
                 /*.loginProcessingUrl("/login")*/
                 .defaultSuccessUrl("/profile",true)
                 .failureUrl("/login.html?error=true");
