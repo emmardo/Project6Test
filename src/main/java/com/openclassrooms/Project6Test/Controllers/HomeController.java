@@ -79,14 +79,17 @@ public class HomeController {
     @PostMapping("/loginPost")
     public ModelAndView loginUser(@ModelAttribute("user")User user) {
 
+        CharSequence pass = user.getPassword();
+
         UserDetails userDetails = myUserDetailsService.loadUserByUsername(user.getEmail());
 
-        if (userDetails.getPassword().equals(userService.getUserByEmail(user.getEmail()).getPassword())) {
+        if (passwordEncoder.encode(pass).equals(userDetails.getPassword())) {
 
             RedirectView redirectView = new RedirectView();
             redirectView.setUrl("/profile");
 
             return new ModelAndView(redirectView);
+
         } else {
 
             RedirectView redirectView = new RedirectView();
