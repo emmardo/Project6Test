@@ -12,42 +12,136 @@
             <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}" title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
         </div>
         <div class="headerRowDivs" id="linksDiv">
-            <div><h4 class="linksDivs" id="homeLink">Home</h4></div>
-            <div><h4 class="linksDivs" id="transferLink">Transfer</h4></div>
-            <div><h4 class="linksDivs" id="profileLink">Profile</h4></div>
-            <div><h4 class="linksDivs" id="contactLink">Contact</h4></div>
-            <div><h4 class="linksDivs" id="logoffLink">Log off</h4></div>
+            <div  class="links">
+                <a href="/home" class="linksDivs">Home</a>
+            </div>
+            <div>
+                <a href="/transfer" class="linksDivs">Transfer</a>
+            </div>
+            <div>
+                <a href="/profile" class="linksDivs">Profile</a>
+            </div>
+            <div>
+                <a href="/contact" class="linksDivs">Contact</a>
+            </div>
+            <div>
+                <a href="/home" class="linksDivs">Log off</a>
+            </div>
         </div>
     </div>
     <div class="mainDivRows" id="secondRowDiv">
-        <div class="secondRowItems"><h5>Home</h5></div>
-        <div class="secondRowItems"><h5>/</h5></div>
-        <div class="secondRowItems"><h5>Profile</h5></div>
+        <div class="secondRowItems">
+            <h5>Home</h5>
+        </div>
+        <div class="secondRowItems">
+            <h5>/</h5>
+        </div>
+        <div class="secondRowItems">
+            <h5>Profile</h5>
+        </div>
     </div>
     <div class="mainDivRows" id="mainRowDiv">
         <div>
-            <div><h4>Available Balance:</h4></div>
-            <div><h4>100£</h4></div>
+            <div>
+                <div>
+                    <h4>Available Balance:</h4>
+                </div>
+                <div>
+                    <h4 th:text="${#numbers.formatDecimal(user.getAccount().getCurrentBalance(), 1, 2) + '£'}">100£</h4>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <a href="/addMoney">Top Up</a>
+                </div>
+                <div>
+                    <a href="/withdrawal">Withdrawal</a>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Connections</th>
+                            </tr>
+                        </thead>
+                        <tbody th:remove="all">
+                            <tr th:each="connectionListElement : ${user.getAccount().getConnectionListElements()}">
+                                <td th:text="${connectionListElement.getConnection().getUser().getEmail()}">queti@queti.co.uk</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <a href="/addConnection">Add Connection</a>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>IBANs</th>
+                            </tr>
+                        </thead>
+                        <tbody th:remove="all">
+                            <tr th:each="iban : ${user.getAccount().getIbans()}">
+                                <td th:text="${iban.getIban()}">GB XXXX ....</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <a href="/addConnection">Add IBAN</a>
+                </div>
+            </div>
         </div>
         <div>
-            <div><h4>Top Up</h4></div>
-            <div><h4>Withdrawal</h4></div>
-        </div>
-        <div>
-            <div><h4>CONNECTIONS DROPDOWN GOES HERE</h4></div>
-            <div><h4>ADD CONNECTION LINK GOES HERE</h4></div>
-        </div>
-        <div>
-            <div><h4>IBANS DROPDOWN GOES HERE</h4></div>
-        </div>
-
-        <div>
-            <div><h4>Account Email:</h4></div>
-            <div><h4>queti@queti.co.uk</h4></div>
-        </div>
-        <div>
-            <div><h4>Update Email LINK GOES HERE</h4></div>
-            <div><h4>Update Password LINK GOES HERE</h4></div>
+            <div>
+                <div>
+                    <h4>Account Email:</h4>
+                </div>
+                <div>
+                    <h4 th:text="${user.getEmail()}">queti@queti.co.uk</h4>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <h4>Update Email</h4>
+                </div>
+                <div>                            <!--create handling method-->
+                    <form name="form" th:action="@{/loginPost}" method="post">
+                        <div th:if="${param.error}" class="alert alert-error">Emails don't match or are Invalid</div>
+                        <div>
+                            <input type="text" id="New Email" name="New Email" placeholder="New Email"/>
+                        </div>
+                        <div>
+                            <input type="text" id="Confirm New Email" name="Confirm New Email" placeholder="Confirm New Email"/>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn">Update Email</button>
+                        </div>
+                    </form>
+                </div>
+                <div>
+                    <h4>Update Password</h4>
+                </div>
+                <div>                            <!--create handling method-->
+                    <form name="form" th:action="@{/loginPost}" method="post">
+                        <div th:if="${param.error}" class="alert alert-error">Passwords don't match or are Invalid</div>
+                        <div>
+                            <input type="text" id="New Password" name="New Password" placeholder="New Password"/>
+                        </div>
+                        <div>
+                            <input type="text" id="Confirm New Password" name="Confirm New Password" placeholder="Confirm New Password"/>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn">Update Password</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>

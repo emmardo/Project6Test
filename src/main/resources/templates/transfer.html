@@ -9,28 +9,63 @@
 <div id="mainDiv">
     <div class="mainDivRows" id="headerRowDiv">
         <div class="headerRowDivs" id="iconDiv">
-            <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}" title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
+            <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}"
+                 title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
         </div>
         <div class="headerRowDivs" id="linksDiv">
-            <div><h4 class="linksDivs" id="homeLink">Home</h4></div>
-            <div><h4 class="linksDivs" id="transferLink">Transfer</h4></div>
-            <div><h4 class="linksDivs" id="profileLink">Profile</h4></div>
-            <div><h4 class="linksDivs" id="contactLink">Contact</h4></div>
-            <div><h4 class="linksDivs" id="logoffLink">Log off</h4></div>
+            <div  class="links">
+                <a href="/home" class="linksDivs">Home</a>
+            </div>
+            <div>
+                <a href="/transfer" class="linksDivs">Transfer</a>
+            </div>
+            <div>
+                <a href="/profile" class="linksDivs">Profile</a>
+            </div>
+            <div>
+                <a href="/contact" class="linksDivs">Contact</a>
+            </div>
+            <div>
+                <a href="/home" class="linksDivs">Log off</a>
+            </div>
         </div>
     </div>
     <div class="mainDivRows" id="secondRowDiv">
-        <div class="secondRowItems"><h5>Home</h5></div>
-        <div class="secondRowItems"><h5>/</h5></div>
-        <div class="secondRowItems"><h5>Profile</h5></div>
+        <div class="secondRowItems">
+            <h5>Home</h5>
+        </div>
+        <div class="secondRowItems">
+            <h5>/</h5>
+        </div>
+        <div class="secondRowItems">
+            <h5>Transfer</h5>
+        </div>
     </div>
     <div class="mainDivRows" id="mainRowDiv">
         <div class="subRowsDivs" id="subRow1">
-            <div><h4>Send Money</h4></div>
-            <div><button name="connectionButton" type="submit" value="Add Connection">Add Connection</button></div>
+            <div>
+                <h4>Send Money</h4>
+            </div>
+            <div>
+                <button name="connectionButton" type="submit" value="Add Connection">Add Connection</button>
+            </div>
         </div>
         <div class="subRowsDivs" id="subRow2">
-            <button name="payButton" type="submit" value="Pay">Pay</button>
+            <div>
+                <select th:field="*{user.getAccount().getConnectionListElements()}">
+                    <option value="">Select your Buddy</option>
+                    <option th:each="connectionListElement : ${user.getAccount().getConnectionListElements()}"
+                            th:value="${connectionListElement.getConnection().getUser().getEmail()}"
+                            th:text="${connectionListElement.getConnection().getUser().getEmail()}">
+                    </option>
+                </select>
+            </div>
+            <div>
+                <input type="text" id="moneyInput" name="moneyInput" placeholder="Send how much?"/>
+            </div>
+            <div>
+                <button name="payButton" type="submit" value="Pay">Pay</button>
+            </div>
         </div>
         <div class="subRowsDivs" id="subRow3">
             <h4>My Transactions</h4>
@@ -45,24 +80,12 @@
                         <th>Amount</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>Sent</td>
-                        <td>a@a.co.uk</td>
+                <tbody th:remove="all">
+                    <tr th:each="transaction : ${user.getAccount().getTransactions()}">
+                        <td th:text="${transaction.getConnection().getTransactionType().getTransactionType()}">Sent</td>
+                        <td th:text="${transaction.getConnection().getUser().getEmail()}">a@a.co.uk</td>
                         <td>...</td>
-                        <td>10</td>
-                    </tr>
-                    <tr>
-                        <td>Received</td>
-                        <td>b@b.co.uk</td>
-                        <td>...</td>
-                        <td>10</td>
-                    </tr>
-                    <tr>
-                        <td>Received</td>
-                        <td>c@c.co.uk</td>
-                        <td>...</td>
-                        <td>10</td>
+                        <td th:text="${#numbers.formatDecimal(transaction.getMoneyAmount(), 1,2) + '£'}">10£</td>
                     </tr>
                 </tbody>
             </table>

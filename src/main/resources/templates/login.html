@@ -11,12 +11,17 @@
         <form name="form" th:action="@{/loginPost}" method="post">
             <fieldset>
                 <div class="headerRowDivs" id="iconDiv">
-                    <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}" title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
+                    <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}"
+                         title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
                 </div>
                 <div th:if="${param.error}" class="alert alert-error">Invalid Username or Password</div>
                 <div th:if="${param.logout}" class="alert alert-success">You have been logged out</div>
-                <div><input type="text" id="username" name="email" placeholder="Email"/></div>
-                <div><input type="password" id="password" name="password" placeholder="Password"/></div>
+                <div>
+                    <input type="text" id="username" name="email" placeholder="Email"/>
+                </div>
+                <div>
+                    <input type="password" id="password" name="password" placeholder="Password"/>
+                </div>
                 <div class="form-actions">
                     <button type="submit" class="btn">Login</button>
                 </div>
