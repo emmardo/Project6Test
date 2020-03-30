@@ -20,6 +20,7 @@ public class Connection {
     /*@Column(name = "fk_connection_type_id")*/
     private ConnectionType connectionType;
 
+    //"Other side" of Connection
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_user_id")
     /*@Column(name = "fk_user_id")*/

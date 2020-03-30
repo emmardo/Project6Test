@@ -14,10 +14,12 @@ public class ConnectionListElement {
     @Column(name = "connection_list_element_id")
     private int id;
 
+    //Account of User to whom the Connection Element belongs
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_account_id")
     private Account account;
 
+    //Connection "side" of a User
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_connection_id")
     private Connection connection;

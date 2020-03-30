@@ -12,26 +12,56 @@
             <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}" title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
         </div>
         <div class="headerRowDivs" id="linksDiv">
-            <div><h4 class="linksDivs" id="homeLink">Home</h4></div>
-            <div><h4 class="linksDivs" id="transferLink">Transfer</h4></div>
-            <div><h4 class="linksDivs" id="profileLink">Profile</h4></div>
-            <div><h4 class="linksDivs" id="contactLink">Contact</h4></div>
-            <div><h4 class="linksDivs" id="logoffLink">Log off</h4></div>
+            <div>
+                <a href="/home" class="linksDivs" id="homeLink">Home</a>
+            </div>
+            <div>
+                <a href="/transfer" class="linksDivs" id="transferLink">Transfer</a>
+            </div>
+            <div>
+                <a href="/profile" class="linksDivs" id="profileLink">Profile</a>
+            </div>
+            <div>
+                <a href="/contact" class="linksDivs" id="contactLink">Contact</a>
+            </div>
+            <div>
+                <a href="/logout" class="linksDivs" id="logoutLink">Logout</a>
+            </div>
         </div>
     </div>
     <div class="mainDivRows" id="secondRowDiv">
-        <div class="secondRowItems"><h5>Home</h5></div>
-        <div class="secondRowItems"><h5>/</h5></div>
-        <div class="secondRowItems"><h5>Profile</h5></div>
+        <div class="secondRowItems">
+            <h5>Home</h5>
+        </div>
+        <div class="secondRowItems">
+            <h5>/</h5>
+        </div>
+        <div class="secondRowItems">
+            <h5>Withdrawal</h5>
+        </div>
     </div>
     <div class="mainDivRows" id="mainRowDiv">
         <div>
-            <div><h3>Withdraw Money</h3></div>
+            <div>
+                <h3>Withdraw Money</h3>
+            </div>
         </div>
         <div>
-            <div><h4>MONEY GOES HERE</h4></div>
-            <div><h4>IBAN GOES HERE</h4></div>
-            <div><h4>BUTTON GOES HERE</h4></div>
+            <form name="form" th:action="@{/withdrawal}" th:object="${transaction}" method="post">
+                <div>
+                    <input type="text" id="moneyAmount" name="moneyAmount" th:field="*{moneyAmount}"
+                           placeholder="Withdraw how much?"/>
+                </div>
+                <div th:object="${ibans}" th:remove="all-but-first">
+                    <select th:each="iban : ${ibans}">
+                        <option th:text="${iban.ibanString}">GB1234...</option>
+                        <option >GB1234...</option>
+                        <option>GB1234...</option>
+                    </select>
+                </div>
+                <div>
+                    <button type="submit" class="btn">Withdraw Money</button>
+                </div>
         </div>
 
     </div>

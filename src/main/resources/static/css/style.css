@@ -44,6 +44,42 @@ body{
     text-decoration: none;
 }
 
+#homeLink{
+    text-decoration: none;
+}
+
+#transferLink{
+    text-decoration: none;
+}
+
+#profileLink{
+    text-decoration: none;
+}
+
+#contactLink{
+    text-decoration: none;
+}
+
+#logoutLink{
+    text-decoration: none;
+}
+
+#addConnectionLink{
+    text-decoration: none;
+}
+
+#addIbanLink{
+    text-decoration: none;
+}
+
+#topUpLink{
+    text-decoration: none;
+}
+
+#withdrawalLink{
+    text-decoration: none;
+}
+
 #icon{
     border-radius: 10px;
     margin: 3px;

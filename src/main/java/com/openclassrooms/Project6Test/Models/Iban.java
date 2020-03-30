@@ -4,6 +4,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -22,9 +23,9 @@ public class Iban {
     /*@Column(name = "fk_account_id")*/
     private Account account;
 
-    @NotNull
     @NotBlank
-    private String iban;
+    @Column(name = "iban")
+    private String ibanString;
 
     @OneToMany(mappedBy = "iban")
     private List<Transaction> transactions;
@@ -32,10 +33,10 @@ public class Iban {
     public Iban() {
     }
 
-    public Iban(Account account, String iban) {
+    public Iban(Account account, String ibanString) {
 
         this.account = account;
-        this.iban = iban;
+        this.ibanString = ibanString;
     }
 
     public int getId() {
@@ -54,12 +55,12 @@ public class Iban {
         this.account = account;
     }
 
-    public String getIban() {
-        return iban;
+    public String getIbanString() {
+        return ibanString;
     }
 
-    public void setIban(String iban) {
-        this.iban = iban;
+    public void setIbanString(String iban) {
+        this.ibanString = ibanString;
     }
 
     public List<Transaction> getTransactions() {

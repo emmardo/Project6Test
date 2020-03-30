@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-//Added but not sure if it works...
 @EnableJpaRepositories( basePackageClasses = UserRepository.class)
 public class Project6TestApplication {
 

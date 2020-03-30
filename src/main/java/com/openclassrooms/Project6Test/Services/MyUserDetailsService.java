@@ -1,7 +1,9 @@
 package com.openclassrooms.Project6Test.Services;
 
+import com.openclassrooms.Project6Test.Models.Account;
 import com.openclassrooms.Project6Test.Models.MyUserDetails;
 import com.openclassrooms.Project6Test.Models.User;
+import com.openclassrooms.Project6Test.Repositories.AccountRepository;
 import com.openclassrooms.Project6Test.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +19,9 @@ public class MyUserDetailsService implements UserDetailsService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    AccountRepository accountRepository;
+
     @Override
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
 
@@ -24,6 +29,6 @@ public class MyUserDetailsService implements UserDetailsService {
 
         Optional.of(user).orElseThrow(() -> new UsernameNotFoundException("Not found: " + userEmail));
 
-        return new MyUserDetails(user);
+        return new MyUserDetails(user, user.getRole());
     }
 }

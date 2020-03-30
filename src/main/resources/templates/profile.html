@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <link type="text/css" rel="stylesheet" th:href="@{/css/style.css}" href="../static/css/style.css">
@@ -9,45 +9,109 @@
 <div id="mainDiv">
     <div class="mainDivRows" id="headerRowDiv">
         <div class="headerRowDivs" id="iconDiv">
-            <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}" title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
+            <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}"
+                 title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
         </div>
         <div class="headerRowDivs" id="linksDiv">
-            <div><h4 class="linksDivs" id="homeLink">Home</h4></div>
-            <div><h4 class="linksDivs" id="transferLink">Transfer</h4></div>
-            <div><h4 class="linksDivs" id="profileLink">Profile</h4></div>
-            <div><h4 class="linksDivs" id="contactLink">Contact</h4></div>
-            <div><h4 class="linksDivs" id="logoffLink">Log off</h4></div>
+            <div>
+                <a href="/home" class="linksDivs" id="homeLink">Home</a>
+            </div>
+            <div>
+                <a href="/transfer" class="linksDivs" id="transferLink">Transfer</a>
+            </div>
+            <div>
+                <a href="/profile" class="linksDivs" id="profileLink">Profile</a>
+            </div>
+            <div>
+                <a href="/contact" class="linksDivs" id="contactLink">Contact</a>
+            </div>
+            <div>
+                <a href="/logout" class="linksDivs" id="logoutLink">Logout</a>
+            </div>
         </div>
     </div>
     <div class="mainDivRows" id="secondRowDiv">
-        <div class="secondRowItems"><h5>Home</h5></div>
-        <div class="secondRowItems"><h5>/</h5></div>
-        <div class="secondRowItems"><h5>Profile</h5></div>
+        <div class="secondRowItems">
+            <h5>Home</h5>
+        </div>
+        <div class="secondRowItems">
+            <h5>/</h5>
+        </div>
+        <div class="secondRowItems">
+            <h5>Profile</h5>
+        </div>
     </div>
     <div class="mainDivRows" id="mainRowDiv">
         <div>
-            <div><h4>Available Balance:</h4></div>
-            <div><h4>100£</h4></div>
+            <div>
+                <h4>Available Balance:</h4>
+            </div>
+            <div>
+                <h4 th:text="${#numbers.formatDecimal(user.account.currentBalance, 1, 2)}">100£</h4>
+            </div>
         </div>
         <div>
-            <div><h4>Top Up</h4></div>
-            <div><h4>Withdrawal</h4></div>
+            <div>
+                <a href="/addMoney" class="linksDivs" id="topUpLink">Top Up</a>
+            </div>
+            <div>
+                <a href="/withdrawal" class="linksDivs" id="withdrawalLink">Withdrawal</a>
+            </div>
         </div>
         <div>
-            <div><h4>CONNECTIONS DROPDOWN GOES HERE</h4></div>
-            <div><h4>ADD CONNECTION LINK GOES HERE</h4></div>
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>CONNECTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody th:remove="all-but-first">
+                        <tr th:each="connectionListElement : ${connectionListElements}">
+                            <td th:text="${connectionListElement.connection.user.email}">queti@queti.com</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <a href="/addConnection" class="linksDivs" id="addConnectionLink">Add Connection</a>
+            </div>
         </div>
         <div>
-            <div><h4>IBANS DROPDOWN GOES HERE</h4></div>
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>IBANS</th>
+                        </tr>
+                    </thead>
+                    <tbody th:remove="all-but-first">
+                        <tr th:each="iban : ${ibans}">
+                            <td th:text="${iban.ibanString}">queti@queti.com</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <a href="/addIban" class="linksDivs" id="addIbanLink">Add Iban</a>
+            </div>
         </div>
 
         <div>
-            <div><h4>Account Email:</h4></div>
-            <div><h4>queti@queti.co.uk</h4></div>
+            <div>
+                <h4>Account Email:</h4>
+            </div>
+            <div>
+                <h4 th:text="${user.email}">queti@queti.co.uk</h4>
+            </div>
         </div>
         <div>
-            <div><h4>Update Email LINK GOES HERE</h4></div>
-            <div><h4>Update Password LINK GOES HERE</h4></div>
+            <div>
+                <h4>Update Email LINK GOES HERE</h4>
+            </div>
+            <div>
+                <h4>Update Password LINK GOES HERE</h4>
+            </div>
         </div>
     </div>
 </div>

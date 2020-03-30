@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -55,22 +56,13 @@ public class UserService {
 
 
     public void createUserByRole(String email, String password, String userRole) {
-
         if(!userAccountExistenceValidatorByEmail(email) && userRoleValidator(userRole)
-            && (password != null || !password.isEmpty())) {
+            && (password != null && !password.isEmpty())) {
 
             entityTypesExistenceChecker();
 
-            /*//Create Role
-            Role role = new Role(roleRepository.findRoleByRole(userRole).getRole());*/
-
-            //Create User and Assign Email, Password and Role to it
             User user;
             user = new User(email, password, roleRepository.findRoleByRole(userRole));
-
-            //Create Date and Assign it to the Created User
-            Date date = new Date();
-            user.setCreatedAt(date);
 
             userRepository.save(user);
 
@@ -236,12 +228,10 @@ public class UserService {
     public void entityTypesExistenceChecker() {
 
         if(roleRepository.findAll().isEmpty()){
-
             roleRepository.saveAll(Arrays.asList(new Role("Company"), new Role("Admin"), new Role("Regular")));
         }
 
         if(userModificationTypeRepository.findAll().isEmpty()){
-
             userModificationTypeRepository.saveAll(
                     Arrays.asList(new UserModificationType("Email"), new UserModificationType("Password")));
         }

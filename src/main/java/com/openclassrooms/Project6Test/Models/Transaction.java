@@ -4,6 +4,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -36,18 +37,18 @@ public class Transaction {
     /*@Column(name = "fk_iban_id")*/
     private Iban iban;
 
-    @NotBlank
+    @NotNull
     @Column(name = "senders_balance_before_transaction")
     private float sendersBalanceBeforeTransaction;
 
     @Column(name = "receivers_balance_before_transaction")
     private float receiversBalanceBeforeTransaction;
 
-    @NotBlank
+    @NotNull
     @Column(name = "money_variation")
     private float moneyAmount;
 
-    @NotBlank
+    @NotNull
     @Column(name = "made_at")
     private Date madeAt;
 

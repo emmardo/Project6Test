@@ -30,7 +30,7 @@ public class IbanTest {
 
         //Assert
         assertEquals(account, newIban.getAccount());
-        assertEquals(iban, newIban.getIban());
+        assertEquals(iban, newIban.getIbanString());
     }
 
     @Test
@@ -66,10 +66,10 @@ public class IbanTest {
         Iban newIban = new Iban();
 
         //Act
-        newIban.setIban(iban);
+        newIban.setIbanString(iban);
 
         //Assert
-        assertEquals(iban, newIban.getIban());
+        assertEquals(iban, newIban.getIbanString());
     }
 
     @Test

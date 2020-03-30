@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link type="text/css" rel="stylesheet" th:href="@{/css/style.css}" href="../static/css/style.css">
-    <title>Add Money</title>
+    <title>Add Connection</title>
 </head>
 <body>
 <div id="mainDiv">
@@ -37,30 +37,25 @@
             <h5>/</h5>
         </div>
         <div class="secondRowItems">
-            <h5>Add Money</h5>
+            <h5>Add your Buddy</h5>
         </div>
     </div>
     <div class="mainDivRows" id="mainRowDiv">
         <div>
             <div>
-                <h3>Add Money</h3>
+                <h3>Add an IBAN</h3>
             </div>
         </div>
         <div>
-            <form name="form" th:action="@{/addMoney}" th:object="${transaction}" method="post">
-                <div >
-                    <input type="text" id="moneyAmount" name="moneyAmount" th:field="*{moneyAmount}"
-                           placeholder="Add how much?"/>
-                </div>
+            <form name="form" th:action="@{/addIban}" th:object="${iban}" method="post">
                 <div>
-                    <select th:field="*{origin}">
-                        <option value="Bank Account">Bank Account</option>
-                        <option value="Debit Card">Debit Card</option>
-                        <option value="Credit Card">Credit Card</option>
-                    </select>
-                </div>
+                    <h4>Introduce an Iban. We'll Add it To Your Iban List If it doesn't already Exist</h4></div>
                 <div>
-                    <button type="submit" class="btn">Add Money</button>
+                    <input type="text" id="username" name="email" th:field="*{ibanString}"
+                           placeholder="Your Iban here..."/>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn">Save</button>
                 </div>
             </form>
         </div>

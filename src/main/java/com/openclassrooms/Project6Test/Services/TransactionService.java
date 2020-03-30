@@ -101,7 +101,7 @@ public class TransactionService {
             }else if(transactionTypeString.equals("Withdrawal")) {
 
                 if(ibanRepository.findByAccount_UserEmail(sendersEmail).stream()
-                        .noneMatch(i -> i.getIban().equals(receiversEmailOrIbanOrOrigin))) {
+                        .noneMatch(i -> i.getIbanString().equals(receiversEmailOrIbanOrOrigin))) {
 
                     Iban newIban = new Iban(sendersAccount, receiversEmailOrIbanOrOrigin);
 
@@ -112,7 +112,7 @@ public class TransactionService {
                 }else{
 
                     Iban iban = ibanRepository.findByAccount_UserEmail(sendersEmail).stream()
-                                .filter(i -> i.getIban().equals(receiversEmailOrIbanOrOrigin)).findFirst().get();
+                                .filter(i -> i.getIbanString().equals(receiversEmailOrIbanOrOrigin)).findFirst().get();
 
                     newTransaction.setIban(iban);
                 }

@@ -12,25 +12,59 @@
             <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}" title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
         </div>
         <div class="headerRowDivs" id="linksDiv">
-            <div><h4 class="linksDivs" id="homeLink">Home</h4></div>
-            <div><h4 class="linksDivs" id="transferLink">Transfer</h4></div>
-            <div><h4 class="linksDivs" id="profileLink">Profile</h4></div>
-            <div><h4 class="linksDivs" id="contactLink">Contact</h4></div>
-            <div><h4 class="linksDivs" id="logoffLink">Log off</h4></div>
+            <div>
+                <a href="/home" class="linksDivs" id="homeLink">Home</a>
+            </div>
+            <div>
+                <a href="/transfer" class="linksDivs" id="transferLink">Transfer</a>
+            </div>
+            <div>
+                <a href="/profile" class="linksDivs" id="profileLink">Profile</a>
+            </div>
+            <div>
+                <a href="/contact" class="linksDivs" id="contactLink">Contact</a>
+            </div>
+            <div>
+                <a href="/logout" class="linksDivs" id="logoutLink">Logout</a>
+            </div>
         </div>
     </div>
     <div class="mainDivRows" id="secondRowDiv">
-        <div class="secondRowItems"><h5>Home</h5></div>
-        <div class="secondRowItems"><h5>/</h5></div>
-        <div class="secondRowItems"><h5>Profile</h5></div>
+        <div class="secondRowItems">
+            <h5>Home</h5>
+        </div>
+        <div class="secondRowItems">
+            <h5>/</h5>
+        </div>
+        <div class="secondRowItems">
+            <h5>Transfer</h5>
+        </div>
     </div>
     <div class="mainDivRows" id="mainRowDiv">
         <div class="subRowsDivs" id="subRow1">
-            <div><h4>Send Money</h4></div>
-            <div><button name="connectionButton" type="submit" value="Add Connection">Add Connection</button></div>
+            <div>
+                <h4>Send Money</h4>
+            </div>
+            <div>
+                <button name="connectionButton" type="submit" value="Add Connection">Add Connection</button>
+            </div>
         </div>
         <div class="subRowsDivs" id="subRow2">
-            <button name="payButton" type="submit" value="Pay">Pay</button>
+            <div>
+                <select th:each="connectionListElement : ${user.account.connectionListElements}"
+                         id="connectionsSelect" th:remove="all-but-first" >
+                    <option th:text="${connectionListElement.account.user.email}">a@a.co.uk</option>
+                    <option >a@a.co.uk</option>
+                    <option>b@b.co.uk</option>
+                    <option>c@c.co.uk</option>
+                </select>
+            </div>
+            <div>
+                <input type="text" id="moneyAmount" name="moneyAmount" placeholder="How much?"/>
+            </div>
+            <div>
+                <button name="payButton" type="submit" value="Pay">Pay</button>
+            </div>
         </div>
         <div class="subRowsDivs" id="subRow3">
             <h4>My Transactions</h4>
@@ -45,12 +79,12 @@
                         <th>Amount</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>Sent</td>
-                        <td>a@a.co.uk</td>
-                        <td>...</td>
-                        <td>10</td>
+                <tbody th:remove="all-but-first">
+                    <tr th:each="transaction : ${user.account.transactions}">
+                        <td th:text="${transaction.transactionType.transactionType}">Received</td>
+                        <td th:text="${transaction.connection.user.email}">a@a.co.uk</td>
+                        <td th:text="${transaction.madeAt}">...</td>
+                        <td th:text="${transaction.moneyAmount}">10</td>
                     </tr>
                     <tr>
                         <td>Received</td>

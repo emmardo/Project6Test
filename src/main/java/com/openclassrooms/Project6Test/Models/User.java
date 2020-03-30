@@ -1,12 +1,12 @@
 package com.openclassrooms.Project6Test.Models;
 
+import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 
@@ -20,9 +20,8 @@ public class User {
     @Column(name = "user_id")
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_role_id")
-    /*@Column(name = "fk_role_id")*/
     private Role role;
 
     @Email
@@ -41,11 +40,14 @@ public class User {
     @LastModifiedDate
     private Date updatedAt;
 
+    @Type(type = "numeric_boolean")
+    private boolean active;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserModificationRegister> userModificationRegisters;
 
     //changed mapped from "account"
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Account account;
 
     //changed mapped from "connection"
@@ -133,4 +135,23 @@ public class User {
     public void setConnection(Connection connection) {
         this.connection = connection;
     }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) { this.active = active; }
+
+    @PrePersist
+    public void setCreatedAt() {
+        this.createdAt = new Date();
+        this.active = true;
+    }
+
+    @PreUpdate
+    public void setUpdatedAt() {
+        this.updatedAt = new Date();
+    }
+
+
 }

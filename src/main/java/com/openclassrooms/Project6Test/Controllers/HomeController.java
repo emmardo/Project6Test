@@ -1,45 +1,58 @@
 package com.openclassrooms.Project6Test.Controllers;
 
 import com.openclassrooms.Project6Test.Models.ConnectionListElement;
+import com.openclassrooms.Project6Test.Models.Iban;
+import com.openclassrooms.Project6Test.Models.Transaction;
 import com.openclassrooms.Project6Test.Models.User;
-import com.openclassrooms.Project6Test.Services.ConnectionListElementService;
-import com.openclassrooms.Project6Test.Services.ConnectionService;
-import com.openclassrooms.Project6Test.Services.MyUserDetailsService;
-import com.openclassrooms.Project6Test.Services.UserService;
+import com.openclassrooms.Project6Test.Services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.transaction.Transactional;
+import java.util.List;
+
 @RestController
 @RequestMapping("/")
+@Transactional
 public class HomeController {
 
     private UserService userService;
     private ConnectionService connectionService;
     private ConnectionListElementService connectionListElementService;
     private MyUserDetailsService myUserDetailsService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private TransactionService transactionService;
+    private IbanService ibanService;
 
     @Autowired
     public HomeController(UserService userService, ConnectionService connectionService,
                           ConnectionListElementService connectionListElementService,
-                          MyUserDetailsService myUserDetailsService) {
+                          MyUserDetailsService myUserDetailsService, TransactionService transactionService,
+                          IbanService ibanService) {
 
         this.userService = userService;
         this.connectionService = connectionService;
         this.connectionListElementService = connectionListElementService;
         this.myUserDetailsService = myUserDetailsService;
+        this.transactionService = transactionService;
+        this.ibanService = ibanService;
     }
 
     @ModelAttribute
     private User setupForm() {
-        return new User(); }
+        return new User();
+    }
+
+    public User getUserFromAuthentication(Authentication authentication) {
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        return userService.getUserByEmail(userDetails.getUsername());
+    }
 
     @RequestMapping("/")
     public ModelAndView home() {
@@ -60,7 +73,8 @@ public class HomeController {
     @PostMapping("/register")
     public ModelAndView registerUser(@ModelAttribute("user")User user) {
 
-        userService.createUserByRole(user.getEmail(), passwordEncoder.encode(user.getPassword()), "Regular");
+        userService.createUserByRole(user.getEmail(),
+                new BCryptPasswordEncoder().encode(user.getPassword()), "Regular");
 
         RedirectView redirectView = new RedirectView();
         redirectView.setUrl("/login");
@@ -76,47 +90,118 @@ public class HomeController {
         return modelAndView;
     }
 
-    @PostMapping("/loginPost")
-    public ModelAndView loginUser(@ModelAttribute("user")User user) {
+    @GetMapping("/profile")
+    public ModelAndView profile(Authentication authentication) {
 
-        CharSequence pass = user.getPassword();
+        List<Iban> ibans = ibanService.getAllIbansByEmail(getUserFromAuthentication(authentication).getEmail());
 
-        UserDetails userDetails = myUserDetailsService.loadUserByUsername(user.getEmail());
+        List<ConnectionListElement> connectionListElements = connectionListElementService
+                                                            .getConnectionListElementsByUserEmail(
+                                                                    getUserFromAuthentication(authentication).getEmail());
 
-        if (passwordEncoder.encode(pass).equals(userDetails.getPassword())) {
-
-            RedirectView redirectView = new RedirectView();
-            redirectView.setUrl("/profile");
-
-            return new ModelAndView(redirectView);
-
-        } else {
-
-            RedirectView redirectView = new RedirectView();
-            redirectView.setUrl("/login");
-
-            return new ModelAndView(redirectView);
-        }
+        ModelAndView modelAndView = new ModelAndView("/profile");
+        modelAndView.addObject("user", getUserFromAuthentication(authentication));
+        modelAndView.addObject("ibans", ibans);
+        modelAndView.addObject("connectionListElements", connectionListElements);
+        return modelAndView;
     }
 
-    @GetMapping("/profile")
-    public ModelAndView profile() {
+    @GetMapping("/transfer")
+    public ModelAndView transfer(Authentication authentication) {
+
+        ModelAndView modelAndView = new ModelAndView("/transfer");
+        modelAndView.addObject("user", getUserFromAuthentication(authentication));
+        return modelAndView;
+    }
+
+    @GetMapping("/addConnection")
+    public ModelAndView addConnectionGet(@ModelAttribute("connectionListElement") ConnectionListElement connectionListElement) {
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("profile");
+        modelAndView.setViewName("addConnection");
+        modelAndView.addObject("connectionListElement", connectionListElement);
         return modelAndView;
     }
 
     @PostMapping("/addConnection")
-    public ModelAndView addConnection(@ModelAttribute("ConnectionEmail")String connectionEmail) {
+    public ModelAndView addConnection(@ModelAttribute("connectionListElement") ConnectionListElement connectionListElement,
+                                      Authentication authentication) {
 
-        if(connectionService.getConnectionByEmail(connectionEmail) != null) {
-
-            /*connectionListElementService.createConnectionListElement();*/
-        };
+        connectionListElementService.createConnectionListElement(getUserFromAuthentication(authentication).getEmail(),
+                connectionListElement.getConnection().getUser().getEmail());
 
         RedirectView redirectView = new RedirectView();
-        redirectView.setUrl("/addConnection");
+        redirectView.setUrl("/profile");
+
+        return new ModelAndView(redirectView);
+    }
+
+    @GetMapping("/addMoney")
+    public ModelAndView addMoneyGet(@ModelAttribute("transaction")Transaction transaction) {
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("addMoney");
+        modelAndView.addObject("transaction", transaction);
+        return modelAndView;
+    }
+
+    @PostMapping("/addMoney")
+    public ModelAndView addMoneyPost(@ModelAttribute("transaction")Transaction transaction,
+                                 Authentication authentication) {
+
+        User user = getUserFromAuthentication(authentication);
+
+        transactionService.createTransactionByTransactionType(
+                "TopUp", user.getEmail(), transaction.getMoneyAmount(), transaction.getOrigin());
+
+        RedirectView redirectView = new RedirectView();
+        redirectView.setUrl("/profile");
+
+        return new ModelAndView(redirectView);
+    }
+
+    @GetMapping("/addIban")
+    public ModelAndView addIbanGet(@ModelAttribute("iban")Iban iban) {
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("addIban");
+        modelAndView.addObject("iban", iban);
+        return modelAndView;
+    }
+
+    @PostMapping("/addIban")
+    public ModelAndView addIbanPost(@ModelAttribute("iban")Iban iban, Authentication authentication) {
+
+        ibanService.createIban(getUserFromAuthentication(authentication).getEmail(), iban.getIbanString());
+
+        RedirectView redirectView = new RedirectView();
+        redirectView.setUrl("/addIban");
+
+        return new ModelAndView(redirectView);
+    }
+
+    @GetMapping("/withdrawal")
+    public ModelAndView withdrawalGet(@ModelAttribute("transaction")Transaction transaction,
+                                      Authentication authentication) {
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("withdrawal");
+        modelAndView.addObject("ibans", getUserFromAuthentication(authentication).getAccount().getIbans());
+        modelAndView.addObject("transaction", transaction);
+        return modelAndView;
+    }
+
+    @PostMapping("/withdrawal")
+    public ModelAndView withdrawalPost(@ModelAttribute("transaction")Transaction transaction,
+                                     Authentication authentication) {
+
+        User user = getUserFromAuthentication(authentication);
+
+        transactionService.createTransactionByTransactionType(
+                "Withdrawal", user.getEmail(), transaction.getMoneyAmount(), transaction.getOrigin());
+
+        RedirectView redirectView = new RedirectView();
+        redirectView.setUrl("/profile");
 
         return new ModelAndView(redirectView);
     }

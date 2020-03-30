@@ -12,31 +12,48 @@
             <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}" title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
         </div>
         <div class="headerRowDivs" id="linksDiv">
-            <div><h4 class="linksDivs" id="homeLink">Home</h4></div>
-            <div><h4 class="linksDivs" id="transferLink">Transfer</h4></div>
-            <div><h4 class="linksDivs" id="profileLink">Profile</h4></div>
-            <div><h4 class="linksDivs" id="contactLink">Contact</h4></div>
-            <div><h4 class="linksDivs" id="logoffLink">Log off</h4></div>
+            <div>
+                <a href="/home" class="linksDivs" id="homeLink">Home</a>
+            </div>
+            <div>
+                <a href="/transfer" class="linksDivs" id="transferLink">Transfer</a>
+            </div>
+            <div>
+                <a href="/profile" class="linksDivs" id="profileLink">Profile</a>
+            </div>
+            <div>
+                <a href="/contact" class="linksDivs" id="contactLink">Contact</a>
+            </div>
+            <div>
+                <a href="/logout" class="linksDivs" id="logoutLink">Logout</a>
+            </div>
         </div>
     </div>
     <div class="mainDivRows" id="secondRowDiv">
-        <div class="secondRowItems"><h5>Home</h5></div>
-        <div class="secondRowItems"><h5>/</h5></div>
-        <div class="secondRowItems"><h5>Profile</h5></div>
-    </div>
-    <div class="mainDivRows" id="mainRowDiv">
-        <div>
-            <div><h3>Add your Buddy!</h3></div>
+        <div class="secondRowItems">
+            <h5>Home</h5>
         </div>
-        <div>
-            <div><h4>Search for your Buddy's Email Address. We'll Add them To Your Buddies List If they're already Registered with Us</h4></div>
+        <div class="secondRowItems">
+            <h5>/</h5>
+        </div>
+        <div class="secondRowItems">
+            <h5>Add your Buddy</h5>
+        </div>
+    </div>
+    <f class="mainDivRows" id="mainRowDiv">
+        <form name="form" th:action="@{/addConnection}" th:object="${connectionListElement}" method="post">
             <div>
-                <input type="text" id="username" name="email" th:field="*{email}" placeholder="Buddy's Email"/>
+                <h3>Add your Buddy!</h3>
+            </div>
+            <div>
+                <h4>Search for your Buddy's Email Address. We'll Add them To Your Buddies List If they're already Registered with Us</h4></div>
+            <div>
+                <input type="text" id="username" name="email" th:field="*{connection.user.email}" placeholder="Your Buddy's Email here..."/>
             </div>
             <div class="form-actions">
                 <button type="submit" class="btn">Save</button>
             </div>
-        </div>
+        </form>
     </div>
 </div>
 </body>

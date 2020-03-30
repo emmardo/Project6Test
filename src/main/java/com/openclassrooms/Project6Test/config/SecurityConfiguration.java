@@ -16,11 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.sql.DataSource;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-
-    /*@Autowired
-    private DataSource dataSource;*/
 
     @Qualifier("myUserDetailsService")
     @Autowired
@@ -28,20 +25,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
-        /*PasswordEncoder encoder =
-                PasswordEncoderFactories.createDelegatingPasswordEncoder();*/
         auth
                 .userDetailsService(userDetailsService)
-                /*.jdbcAuthentication()*/
-                /*.dataSource(dataSource)*/
-                /*.withUser("user")
-                .password(passwordEncoder().encode("password"))
-                .roles("USER")
-                .and()
-                .withUser("admin")
-                .password(passwordEncoder().encode("admin"))
-                .roles("USER", "ADMIN")*/;
+                .passwordEncoder(new BCryptPasswordEncoder());
     }
 
     @Override
@@ -49,7 +35,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/login").permitAll()
+                .antMatchers("/login**").permitAll()
+                .antMatchers("/doLogin").permitAll()
                 .antMatchers("/register").permitAll()
                 .antMatchers("/admin**").hasRole("Admin")
                 .antMatchers("/user**").hasAnyRole("Admin", "Regular")
@@ -58,14 +45,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/login")
+                .loginProcessingUrl("/doLogin")
                 .usernameParameter("email")
-                /*.loginProcessingUrl("/login")*/
                 .defaultSuccessUrl("/profile",true)
-                .failureUrl("/login.html?error=true");
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+                .failureUrl("/login?error=true")
+                .and()
+                .csrf()
+                .disable();
     }
 }

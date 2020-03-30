@@ -32,6 +32,7 @@ public class Account {
     /*@Column(name = "fk_account_status_id")*/
     private AccountStatus accountStatus;
 
+    //"Other side" of a User/User's Account
     @OneToOne
     @JoinColumn(name = "fk_connection_id")
     /*@Column(name = "fk_conection_id")*/
