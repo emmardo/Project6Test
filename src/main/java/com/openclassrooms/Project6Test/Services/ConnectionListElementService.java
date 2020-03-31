@@ -9,6 +9,7 @@ import com.openclassrooms.Project6Test.Repositories.ConnectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -51,6 +52,21 @@ public class ConnectionListElementService {
     public List<ConnectionListElement> getConnectionListElementsByUserEmail(String userEmail) {
 
         return connectionListElementRepository.findConnectionListElementsByAccountUserEmail(userEmail);
+    }
+
+    public List<String> getAUsersConnectionsEmailsByUserEmail(String userEmail) {
+
+        List<String> connectionsEmails = new ArrayList<>();
+
+        if(getConnectionListElementsByUserEmail(userEmail) != null) {
+
+            for (ConnectionListElement connectionListElement : getConnectionListElementsByUserEmail(userEmail)) {
+
+                connectionsEmails.add(connectionListElement.getConnection().getUser().getEmail());
+            }
+        }
+
+        return connectionsEmails;
     }
 
     public void updateConnectionListElementsConnection(String oldConnectionEmail, String newConnectionEmail) {

@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -95,19 +96,18 @@ public class HomeController {
 
         List<Iban> ibans = ibanService.getAllIbansByEmail(getUserFromAuthentication(authentication).getEmail());
 
-        List<ConnectionListElement> connectionListElements = connectionListElementService
-                                                            .getConnectionListElementsByUserEmail(
-                                                                    getUserFromAuthentication(authentication).getEmail());
+        List<String> connectionsEmails = connectionListElementService.getAUsersConnectionsEmailsByUserEmail(
+                                            getUserFromAuthentication(authentication).getEmail());
 
         ModelAndView modelAndView = new ModelAndView("/profile");
         modelAndView.addObject("user", getUserFromAuthentication(authentication));
         modelAndView.addObject("ibans", ibans);
-        modelAndView.addObject("connectionListElements", connectionListElements);
+        modelAndView.addObject("connectionsEmails", connectionsEmails);
         return modelAndView;
     }
 
     @GetMapping("/transfer")
-    public ModelAndView transfer(Authentication authentication) {
+    public ModelAndView transfer(/*@ModelAttribute("user")User user, */Authentication authentication) {
 
         ModelAndView modelAndView = new ModelAndView("/transfer");
         modelAndView.addObject("user", getUserFromAuthentication(authentication));
@@ -161,18 +161,17 @@ public class HomeController {
     }
 
     @GetMapping("/addIban")
-    public ModelAndView addIbanGet(@ModelAttribute("iban")Iban iban) {
+    public ModelAndView addIbanGet() {
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("addIban");
-        modelAndView.addObject("iban", iban);
         return modelAndView;
     }
 
     @PostMapping("/addIban")
-    public ModelAndView addIbanPost(@ModelAttribute("iban")Iban iban, Authentication authentication) {
+    public ModelAndView addIbanPost(@RequestParam String ibanString, Authentication authentication) {
 
-        ibanService.createIban(getUserFromAuthentication(authentication).getEmail(), iban.getIbanString());
+        ibanService.createIban(getUserFromAuthentication(authentication).getEmail(), ibanString);
 
         RedirectView redirectView = new RedirectView();
         redirectView.setUrl("/addIban");
@@ -181,28 +180,35 @@ public class HomeController {
     }
 
     @GetMapping("/withdrawal")
-    public ModelAndView withdrawalGet(@ModelAttribute("transaction")Transaction transaction,
-                                      Authentication authentication) {
+    public ModelAndView withdrawalGet(Authentication authentication) {
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("withdrawal");
         modelAndView.addObject("ibans", getUserFromAuthentication(authentication).getAccount().getIbans());
-        modelAndView.addObject("transaction", transaction);
+        modelAndView.addObject("iban", new Iban());
         return modelAndView;
     }
 
     @PostMapping("/withdrawal")
-    public ModelAndView withdrawalPost(@ModelAttribute("transaction")Transaction transaction,
+    public ModelAndView withdrawalPost(@ModelAttribute("moneyAmount")float moneyAmount,
+                                       @ModelAttribute("ibanString") Iban iban,
                                      Authentication authentication) {
 
-        User user = getUserFromAuthentication(authentication);
-
         transactionService.createTransactionByTransactionType(
-                "Withdrawal", user.getEmail(), transaction.getMoneyAmount(), transaction.getOrigin());
+                "Withdrawal", getUserFromAuthentication(authentication).getEmail(), moneyAmount,
+                iban.getIbanString());
 
         RedirectView redirectView = new RedirectView();
         redirectView.setUrl("/profile");
 
         return new ModelAndView(redirectView);
+    }
+
+    @GetMapping("/contact")
+    public ModelAndView contact() {
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("contact");
+        return modelAndView;
     }
 }

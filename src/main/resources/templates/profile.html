@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <link type="text/css" rel="stylesheet" th:href="@{/css/style.css}" href="../static/css/style.css">
@@ -44,7 +44,7 @@
     <div class="mainDivRows" id="mainRowDiv">
         <div>
             <div>
-                <h4>Available Balance:</h4>
+                <h4>Your Current Balance:</h4>
             </div>
             <div>
                 <h4 th:text="${#numbers.formatDecimal(user.account.currentBalance, 1, 2)}">100£</h4>
@@ -52,10 +52,10 @@
         </div>
         <div>
             <div>
-                <a href="/addMoney" class="linksDivs" id="topUpLink">Top Up</a>
+                <a href="/addMoney" class="linksDivs" id="topUpLink">Add Funds</a>
             </div>
             <div>
-                <a href="/withdrawal" class="linksDivs" id="withdrawalLink">Withdrawal</a>
+                <a href="/withdrawal" class="linksDivs" id="withdrawalLink">Withdraw Funds</a>
             </div>
         </div>
         <div>
@@ -63,18 +63,18 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>CONNECTIONS</th>
+                            <th>Your Buddies</th>
                         </tr>
                     </thead>
                     <tbody th:remove="all-but-first">
-                        <tr th:each="connectionListElement : ${connectionListElements}">
-                            <td th:text="${connectionListElement.connection.user.email}">queti@queti.com</td>
+                        <tr th:each="connectionEmail : ${connectionsEmails}">
+                            <td th:text="${connectionEmail}">queti@queti.com</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div>
-                <a href="/addConnection" class="linksDivs" id="addConnectionLink">Add Connection</a>
+                <a href="/addConnection" class="linksDivs" id="addConnectionLink">Add A Buddy</a>
             </div>
         </div>
         <div>
@@ -82,7 +82,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>IBANS</th>
+                            <th>Your IBANs</th>
                         </tr>
                     </thead>
                     <tbody th:remove="all-but-first">
@@ -93,13 +93,13 @@
                 </table>
             </div>
             <div>
-                <a href="/addIban" class="linksDivs" id="addIbanLink">Add Iban</a>
+                <a href="/addIban" class="linksDivs" id="addIbanLink">Add an Iban</a>
             </div>
         </div>
 
         <div>
             <div>
-                <h4>Account Email:</h4>
+                <h4>Your Account's Email:</h4>
             </div>
             <div>
                 <h4 th:text="${user.email}">queti@queti.co.uk</h4>
