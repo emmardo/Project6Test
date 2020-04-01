@@ -1,9 +1,6 @@
 package com.openclassrooms.Project6Test.Controllers;
 
-import com.openclassrooms.Project6Test.Models.ConnectionListElement;
-import com.openclassrooms.Project6Test.Models.Iban;
-import com.openclassrooms.Project6Test.Models.Transaction;
-import com.openclassrooms.Project6Test.Models.User;
+import com.openclassrooms.Project6Test.Models.*;
 import com.openclassrooms.Project6Test.Services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -107,11 +104,27 @@ public class HomeController {
     }
 
     @GetMapping("/transfer")
-    public ModelAndView transfer(/*@ModelAttribute("user")User user, */Authentication authentication) {
+    public ModelAndView transferGet(@ModelAttribute("user")User user, Authentication authentication) {
 
         ModelAndView modelAndView = new ModelAndView("/transfer");
         modelAndView.addObject("user", getUserFromAuthentication(authentication));
+        modelAndView.addObject("request", new WithdrawalDTO());
         return modelAndView;
+    }
+
+    @PostMapping("/transfer")
+    public ModelAndView transferPost(@ModelAttribute("moneyAmount") String moneyAmount,
+                                       @ModelAttribute("account") String receiversEmail,
+                                       Authentication authentication) {
+
+        transactionService.createTransactionByTransactionType(
+                "Regular", getUserFromAuthentication(authentication).getEmail(),
+                Float.parseFloat(moneyAmount), receiversEmail);
+
+        RedirectView redirectView = new RedirectView();
+        redirectView.setUrl("/profile");
+
+        return new ModelAndView(redirectView);
     }
 
     @GetMapping("/addConnection")
@@ -185,18 +198,18 @@ public class HomeController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("withdrawal");
         modelAndView.addObject("ibans", getUserFromAuthentication(authentication).getAccount().getIbans());
-        modelAndView.addObject("iban", new Iban());
+        modelAndView.addObject("request", new WithdrawalDTO());
         return modelAndView;
     }
 
     @PostMapping("/withdrawal")
-    public ModelAndView withdrawalPost(@ModelAttribute("moneyAmount")float moneyAmount,
-                                       @ModelAttribute("ibanString") Iban iban,
-                                     Authentication authentication) {
+    public ModelAndView withdrawalPost(@ModelAttribute("moneyAmount") String moneyAmount,
+                                       @ModelAttribute("account") String iban,
+                                       Authentication authentication) {
 
         transactionService.createTransactionByTransactionType(
-                "Withdrawal", getUserFromAuthentication(authentication).getEmail(), moneyAmount,
-                iban.getIbanString());
+                "Withdrawal", getUserFromAuthentication(authentication).getEmail(), Float.parseFloat(moneyAmount),
+                iban);
 
         RedirectView redirectView = new RedirectView();
         redirectView.setUrl("/profile");

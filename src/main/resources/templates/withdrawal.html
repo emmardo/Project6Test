@@ -47,16 +47,14 @@
             </div>
         </div>
         <div>
-            <form name="form" th:action="@{/withdrawal}" method="post">
+            <form name="form" th:action="@{/withdrawal}" th:object="${request}" method="post">
                 <div>
-                    <input type="text" id="moneyAmount" th:value="${moneyAmount}" name="moneyAmount"
+                    <input type="text" id="moneyAmount" th:value="*{amount}" name="moneyAmount"
                            placeholder="Withdraw how much?"/>
                 </div>
                 <div>
-                    <select th:remove="all-but-first" th:field="*{iban.ibanString}">
-                        <option th:each="iban : ${ibans}" th:text="${iban.ibanString}" th:value="${iban.ibanString}">GB1234...</option>
-                        <option >GB1234...</option>
-                        <option>GB1234...</option>
+                    <select th:field="*{account}">
+                        <option th:each="iban : ${ibans}" th:text="${iban.ibanString}" th:value="${iban.ibanString}"></option>
                     </select>
                 </div>
                 <div>

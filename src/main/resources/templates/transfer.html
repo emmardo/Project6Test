@@ -50,21 +50,25 @@
             </div>
         </div>
         <div class="subRowsDivs" id="subRow2">
-            <div>
-                <select th:each="connectionListElement : ${user.account.connectionListElements}"
-                         id="connectionsSelect" th:remove="all-but-first" >
-                    <option th:text="${connectionListElement.account.user.email}">a@a.co.uk</option>
-                    <option >a@a.co.uk</option>
-                    <option>b@b.co.uk</option>
-                    <option>c@c.co.uk</option>
-                </select>
-            </div>
-            <div>
-                <input type="text" id="moneyAmount" name="moneyAmount" placeholder="How much?"/>
-            </div>
-            <div>
-                <button name="payButton" type="submit" value="Pay">Pay</button>
-            </div>
+            <form name="form" th:action="@{/transfer}" th:object="${request}" method="post">
+                <div>
+                    <select id="connectionsSelect" th:field="*{account}" th:remove="all-but-first">
+                        <option th:each="connectionListElement : ${user.account.connectionListElements}"
+                                th:text="${connectionListElement.connection.user.email}"
+                                th:value="${connectionListElement.connection.user.email}">a@a.co.uk</option>
+                        <option >a@a.co.uk</option>
+                        <option>b@b.co.uk</option>
+                        <option>c@c.co.uk</option>
+                    </select>
+                </div>
+
+                <div>
+                    <input type="text" id="moneyAmount" name="moneyAmount"  th:value="*{amount}" placeholder="How much?"/>
+                </div>
+                <div>
+                    <button name="payButton" type="submit" value="Pay">Pay</button>
+                </div>
+            </form>
         </div>
         <div class="subRowsDivs" id="subRow3">
             <h4>My Transactions</h4>

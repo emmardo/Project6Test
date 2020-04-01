@@ -26,7 +26,7 @@ public class TransactionService {
     private IbanRepository ibanRepository;
 
     //SET COMPANY'S ACCOUNT EMAIL!!!
-    String companysEmail = "";
+    String companysEmail = "000@000.com";
 
     //FEE SET TO 0.5% AS FLOAT!!!
     float feeCostInPercentage = 0.5f;
@@ -116,6 +116,9 @@ public class TransactionService {
 
                     newTransaction.setIban(iban);
                 }
+
+                sendersAccount.setCurrentBalance(sendersBalanceBeforeTransaction - moneyAmount);
+                accountRepository.save(sendersAccount);
             }
             transactionRepository.save(newTransaction);
         }
