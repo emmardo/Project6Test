@@ -45,7 +45,7 @@ public class TransactionService {
     }
 
     public void createTransactionByTransactionType(String transactionTypeString, String sendersEmail,
-                                                   float moneyAmount, String receiversEmailOrIbanOrOrigin) {
+                                                   float moneyAmount, String receiversEmailOrIbanOrOrigin, String description) {
 
         if(transactionConditionsValidator(transactionTypeString, sendersEmail, moneyAmount,
                 receiversEmailOrIbanOrOrigin)){
@@ -90,6 +90,7 @@ public class TransactionService {
                 Connection newConnection = connectionRepository.findConnectionByUserEmail(receiversEmailOrIbanOrOrigin);
                 newTransaction.setConnection(newConnection);
                 newTransaction.setReceiversBalanceBeforeTransaction(receiversBalanceBeforeTransaction);
+                newTransaction.setDescription(description);
 
             }else if(transactionTypeString.equals("TopUp")) {
 
@@ -97,6 +98,7 @@ public class TransactionService {
                 accountRepository.save(sendersAccount);
 
                 newTransaction.setOrigin(receiversEmailOrIbanOrOrigin);
+                newTransaction.setDescription("TopUp");
 
             }else if(transactionTypeString.equals("Withdrawal")) {
 
@@ -117,6 +119,8 @@ public class TransactionService {
                     newTransaction.setIban(iban);
                 }
 
+                newTransaction.setDescription("Withdrawal");
+
                 sendersAccount.setCurrentBalance(sendersBalanceBeforeTransaction - moneyAmount);
                 accountRepository.save(sendersAccount);
             }
@@ -128,44 +132,25 @@ public class TransactionService {
     //CORRECT TO BE ABLE TO GET ALL TRANSACTIONS
 
     //Added "Receiver" as Transaction Type to show Transactions received by User
-    public List<Transaction> getAUsersTransactionsByEmailAndTransactionType(String userEmail, String transactionType) {
+    //Transaction Types: "Regular", "TopUp", "Withdrawal" and "Receiver"
+    public List<Transaction> getAUsersTransactionsByEmail(String userEmail) {
 
         List<Transaction> list = new ArrayList<>();
 
-        if(transactionTypeValidator(transactionType) && activeAccountValidator(userEmail)) {
+        if(!transactionRepository.findTransactionsByAccountUserEmail(userEmail).isEmpty()) {
 
-            List<Transaction> regularTransactions = filterTransactionsByTransactionType(transactionType).stream()
-                                                    .filter(t -> t.getAccount().getUser().getEmail()
-                                                    .equals(userEmail)).collect(Collectors.toList());
+            list.addAll(transactionRepository.findTransactionsByAccountUserEmail(userEmail));
+        }
+        if(!transactionRepository.findTransactionsByConnectionUserEmail(userEmail).isEmpty()) {
 
-            List<Transaction> receiverTransactions = filterTransactionsByTransactionType(transactionType).stream()
-                                                    .filter(t -> t.getConnection().getUser().getEmail()
-                                                    .equals(userEmail)).collect(Collectors.toList());
-
-            if(!transactionType.equals("All")) {
-
-                if(transactionType.equals("Receiver")) {
-
-                    list = receiverTransactions;
-
-                }else{
-
-                    list = regularTransactions.stream().filter(t -> t.getTransactionType().getTransactionType()
-                            .equals(transactionType)).collect(Collectors.toList());
-                }
-
-            }else{
-
-                list.addAll(regularTransactions);
-                list.addAll(receiverTransactions);
-            }
+            list.addAll(transactionRepository.findTransactionsByConnectionUserEmail(userEmail));
         }
 
         return list;
     }
 
 
-    public List<Transaction> filterTransactionsByTransactionType(String transactionType) {
+    /*public List<Transaction> filterTransactionsByTransactionType(String transactionType) {
 
         List<Transaction> newList = new ArrayList<>();
 
@@ -190,7 +175,7 @@ public class TransactionService {
         }
 
         return newList;
-    }
+    }*/
 
 
     public boolean transactionConditionsValidator(String transactionTypeString, String sendersEmail,

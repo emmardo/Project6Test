@@ -106,20 +106,63 @@ public class HomeController {
     @GetMapping("/transfer")
     public ModelAndView transferGet(@ModelAttribute("user")User user, Authentication authentication) {
 
+        List<TransactionDTO> dtos = new ArrayList<>();
+
+        List<Transaction> transactions = transactionService.getAUsersTransactionsByEmail(
+                getUserFromAuthentication(authentication).getEmail());
+
+        if(!transactions.isEmpty()) {
+
+            for(Transaction transaction : transactions) {
+
+                TransactionDTO dto = new TransactionDTO();
+
+                dto.setAmount(transaction.getMoneyAmount());
+
+                if(transaction.getTransactionType().getTransactionType().equals("TopUp")) {
+
+                    dto.setDescription(transaction.getDescription() + " - " + transaction.getOrigin());
+                }
+
+                if(transaction.getTransactionType().getTransactionType().equals("Withdrawal")) {
+
+                    dto.setDescription(transaction.getDescription() + " - " + transaction.getIban().getIbanString());
+                }
+
+                if(transaction.getTransactionType().getTransactionType().equals("Regular")) {
+
+                    dto.setDescription(transaction.getDescription());
+                }
+
+                if(transaction.getConnection() == null) {
+
+                    dto.setConnectionEmail("");
+                }else{
+                    dto.setConnectionEmail(transaction.getConnection().getUser().getEmail());
+                }
+
+                dtos.add(dto);
+            }
+        }
+
+        if(dtos.isEmpty()){
+
+            dtos.add(new TransactionDTO("No Transactions Yet", "No Transactions Yet", 0.0f));
+        }
+
         ModelAndView modelAndView = new ModelAndView("/transfer");
+        modelAndView.addObject("transactions", dtos);
+        modelAndView.addObject("request", new TransactionDTO());
         modelAndView.addObject("user", getUserFromAuthentication(authentication));
-        modelAndView.addObject("request", new WithdrawalDTO());
         return modelAndView;
     }
 
     @PostMapping("/transfer")
-    public ModelAndView transferPost(@ModelAttribute("moneyAmount") String moneyAmount,
-                                       @ModelAttribute("account") String receiversEmail,
-                                       Authentication authentication) {
+    public ModelAndView transferPost(@ModelAttribute("request")TransactionDTO request, Authentication authentication) {
 
         transactionService.createTransactionByTransactionType(
                 "Regular", getUserFromAuthentication(authentication).getEmail(),
-                Float.parseFloat(moneyAmount), receiversEmail);
+                request.getAmount(), request.getConnectionEmail(), request.getDescription());
 
         RedirectView redirectView = new RedirectView();
         redirectView.setUrl("/profile");
@@ -165,7 +208,8 @@ public class HomeController {
         User user = getUserFromAuthentication(authentication);
 
         transactionService.createTransactionByTransactionType(
-                "TopUp", user.getEmail(), transaction.getMoneyAmount(), transaction.getOrigin());
+                "TopUp", user.getEmail(), transaction.getMoneyAmount(), transaction.getOrigin(),
+                "Top Up");
 
         RedirectView redirectView = new RedirectView();
         redirectView.setUrl("/profile");
@@ -208,8 +252,8 @@ public class HomeController {
                                        Authentication authentication) {
 
         transactionService.createTransactionByTransactionType(
-                "Withdrawal", getUserFromAuthentication(authentication).getEmail(), Float.parseFloat(moneyAmount),
-                iban);
+                "Withdrawal", getUserFromAuthentication(authentication).getEmail(),
+                Float.parseFloat(moneyAmount), iban, "Withdrawal");
 
         RedirectView redirectView = new RedirectView();
         redirectView.setUrl("/profile");

@@ -9,7 +9,8 @@
 <div id="mainDiv">
     <div class="mainDivRows" id="headerRowDiv">
         <div class="headerRowDivs" id="iconDiv">
-            <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}" title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
+            <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}"
+                 title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
         </div>
         <div class="headerRowDivs" id="linksDiv">
             <div>
@@ -52,7 +53,7 @@
         <div class="subRowsDivs" id="subRow2">
             <form name="form" th:action="@{/transfer}" th:object="${request}" method="post">
                 <div>
-                    <select id="connectionsSelect" th:field="*{account}" th:remove="all-but-first">
+                    <select id="connectionsSelect" th:field="*{connectionEmail}" th:remove="all-but-first">
                         <option th:each="connectionListElement : ${user.account.connectionListElements}"
                                 th:text="${connectionListElement.connection.user.email}"
                                 th:value="${connectionListElement.connection.user.email}">a@a.co.uk</option>
@@ -63,7 +64,12 @@
                 </div>
 
                 <div>
-                    <input type="text" id="moneyAmount" name="moneyAmount"  th:value="*{amount}" placeholder="How much?"/>
+                    <input type="text" id="amount" name="amount" th:value="*{amount}"
+                           placeholder="How much?"/>
+                </div>
+                <div>
+                    <input type="text" id="description" name="description" th:value="*{description}"
+                           placeholder="Add a Description"/>
                 </div>
                 <div>
                     <button name="payButton" type="submit" value="Pay">Pay</button>
@@ -77,27 +83,23 @@
             <table style="width:100%">
                 <thead>
                     <tr>
-                        <th>Type</th>
                         <th>Connection</th>
                         <th>Description</th>
                         <th>Amount</th>
                     </tr>
                 </thead>
                 <tbody th:remove="all-but-first">
-                    <tr th:each="transaction : ${user.account.transactions}">
-                        <td th:text="${transaction.transactionType.transactionType}">Received</td>
-                        <td th:text="${transaction.connection.user.email}">a@a.co.uk</td>
-                        <td th:text="${transaction.madeAt}">...</td>
-                        <td th:text="${transaction.moneyAmount}">10</td>
+                    <tr th:each="transaction : ${transactions}">
+                        <td th:text="${transaction.connectionEmail}">a@a.co.uk</td>
+                        <td th:text="${transaction.description}">...</td>
+                        <td th:text="${#numbers.formatDecimal(transaction.amount, 1, 2) + '£'}">10.00 £</td>
                     </tr>
                     <tr>
-                        <td>Received</td>
                         <td>b@b.co.uk</td>
                         <td>...</td>
                         <td>10</td>
                     </tr>
                     <tr>
-                        <td>Received</td>
                         <td>c@c.co.uk</td>
                         <td>...</td>
                         <td>10</td>

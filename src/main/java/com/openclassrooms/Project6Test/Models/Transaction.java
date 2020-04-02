@@ -3,7 +3,6 @@ package com.openclassrooms.Project6Test.Models;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -53,6 +52,8 @@ public class Transaction {
     private Date madeAt;
 
     private String origin;
+
+    private String description;
 
     public Transaction() {
     }
@@ -143,5 +144,13 @@ public class Transaction {
 
     public void setOrigin(String origin) {
         this.origin = origin;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
