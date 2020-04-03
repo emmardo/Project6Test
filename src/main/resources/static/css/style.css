@@ -115,3 +115,29 @@ fieldset{
 .secondRowItems{
     margin-left: 20px;
 }
+
+.formElement{
+    margin-bottom: 15px;
+}
+
+#mainRowDiv{
+    width: 75%;
+}
+
+#subRow1{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+}
+
+#subRow2{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-evenly;
+    padding: 30px;
+    background-color: lightgray;
+}
+
+table{
+    border-style: solid;
+}

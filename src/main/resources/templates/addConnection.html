@@ -9,20 +9,23 @@
 <div id="mainDiv">
     <div class="mainDivRows" id="headerRowDiv">
         <div class="headerRowDivs" id="iconDiv">
-            <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}" title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
+            <a href="/">
+                <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}"
+                     title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
+            </a>
         </div>
         <div class="headerRowDivs" id="linksDiv">
             <div>
-                <a href="/home" class="linksDivs" id="homeLink">Home</a>
+                <a href="/" class="linksDivs" id="homeLink">Home</a>
             </div>
             <div>
-                <a href="/transfer" class="linksDivs" id="transferLink">Transfer</a>
+                <a href="/user/transfer" class="linksDivs" id="transferLink">Transfer</a>
             </div>
             <div>
-                <a href="/profile" class="linksDivs" id="profileLink">Profile</a>
+                <a href="/user/profile" class="linksDivs" id="profileLink">Profile</a>
             </div>
             <div>
-                <a href="/contact" class="linksDivs" id="contactLink">Contact</a>
+                <a href="/user/contact" class="linksDivs" id="contactLink">Contact</a>
             </div>
             <div>
                 <a href="/logout" class="linksDivs" id="logoutLink">Logout</a>
@@ -41,18 +44,21 @@
         </div>
     </div>
     <f class="mainDivRows" id="mainRowDiv">
-        <form name="form" th:action="@{/addConnection}" th:object="${connectionListElement}" method="post">
+        <form name="form" th:action="@{/user/addConnection}" th:object="${connectionListElement}" method="post">
             <div>
                 <h3>Add your Buddy!</h3>
             </div>
             <div>
-                <h4>Search for your Buddy's Email Address. We'll Add them To Your Buddies List If they're already Registered with Us</h4>
+                <h4>Search for your Buddy's Email Address. We'll Add them To Your Buddies List If they're already
+                    Registered with Us</h4>
             </div>
             <div>
-                <input type="text" id="username" name="email" th:field="*{connection.user.email}" placeholder="Your Buddy's Email here..."/>
+                <input 🤔🤔class="formElement" type="text" id="username" name="email" th:field="*{connection.user.email}"
+                       placeholder="Your Buddy's Email here..."/>
             </div>
+            <br>
             <div class="form-actions">
-                <button type="submit" class="btn">Save</button>
+                <button 🤔🤔class="formElement" type="submit">Save</button>
             </div>
         </form>
     </div>

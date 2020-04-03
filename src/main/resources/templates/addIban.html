@@ -3,26 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <link type="text/css" rel="stylesheet" th:href="@{/css/style.css}" href="../static/css/style.css">
-    <title>Add Connection</title>
+    <title>Add Iban</title>
 </head>
 <body>
 <div id="mainDiv">
     <div class="mainDivRows" id="headerRowDiv">
         <div class="headerRowDivs" id="iconDiv">
-            <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}" title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
+            <a href="/">
+                <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}"
+                     title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
+            </a>
         </div>
         <div class="headerRowDivs" id="linksDiv">
             <div>
-                <a href="/home" class="linksDivs" id="homeLink">Home</a>
+                <a href="/" class="linksDivs" id="homeLink">Home</a>
             </div>
             <div>
-                <a href="/transfer" class="linksDivs" id="transferLink">Transfer</a>
+                <a href="/user/transfer" class="linksDivs" id="transferLink">Transfer</a>
             </div>
             <div>
-                <a href="/profile" class="linksDivs" id="profileLink">Profile</a>
+                <a href="/user/profile" class="linksDivs" id="profileLink">Profile</a>
             </div>
             <div>
-                <a href="/contact" class="linksDivs" id="contactLink">Contact</a>
+                <a href="/user/contact" class="linksDivs" id="contactLink">Contact</a>
             </div>
             <div>
                 <a href="/logout" class="linksDivs" id="logoutLink">Logout</a>
@@ -47,15 +50,17 @@
             </div>
         </div>
         <div>
-            <form name="form" th:action="@{/addIban}" method="post">
+            <form name="form" th:action="@{/user/addIban}" method="post">
                 <div>
-                    <h4>Introduce an Iban. We'll Add it To Your Iban List If it doesn't already Exist</h4></div>
+                    <h4>Introduce an Iban. We'll Add it To Your Iban List If it doesn't already Exist</h4>
+                </div>
                 <div>
-                    <input type="text" id="ibanString" th:value="${ibanString}" name="ibanString"
+                    <input 🤔🤔class="formElement" type="text" id="ibanString" th:value="${ibanString}" name="ibanString"
                            placeholder="Your IBAN here..."/>
                 </div>
+                <br>
                 <div class="form-actions">
-                    <button type="submit" class="btn">Save</button>
+                    <button 🤔🤔class="formElement" type="submit">Save</button>
                 </div>
             </form>
         </div>

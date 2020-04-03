@@ -9,21 +9,23 @@
 <div id="mainDiv">
     <div class="mainDivRows" id="headerRowDiv">
         <div class="headerRowDivs" id="iconDiv">
-            <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}"
-                 title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
+            <a href="/">
+                <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}"
+                     title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
+            </a>
         </div>
         <div class="headerRowDivs" id="linksDiv">
             <div>
-                <a href="/home" class="linksDivs" id="homeLink">Home</a>
+                <a href="/" class="linksDivs" id="homeLink">Home</a>
             </div>
             <div>
-                <a href="/transfer" class="linksDivs" id="transferLink">Transfer</a>
+                <a href="/user/transfer" class="linksDivs" id="transferLink">Transfer</a>
             </div>
             <div>
-                <a href="/profile" class="linksDivs" id="profileLink">Profile</a>
+                <a href="/user/profile" class="linksDivs" id="profileLink">Profile</a>
             </div>
             <div>
-                <a href="/contact" class="linksDivs" id="contactLink">Contact</a>
+                <a href="/user/contact" class="linksDivs" id="contactLink">Contact</a>
             </div>
             <div>
                 <a href="/logout" class="linksDivs" id="logoutLink">Logout</a>
@@ -44,18 +46,16 @@
     <div class="mainDivRows" id="mainRowDiv">
         <div>
             <div>
-                <h4>Your Current Balance:</h4>
+                <h2 class="formElement">Your Account's Email: <span th:text="${user.email}">queti@queti.co.uk</span>
+                </h2>
+                <br>
             </div>
             <div>
-                <h4 th:text="${#numbers.formatDecimal(user.account.currentBalance, 1, 2)}">100£</h4>
-            </div>
-        </div>
-        <div>
-            <div>
-                <a href="/addMoney" class="linksDivs" id="topUpLink">Add Funds</a>
-            </div>
-            <div>
-                <a href="/withdrawal" class="linksDivs" id="withdrawalLink">Withdraw Funds</a>
+                <h3>Your Current Balance: <span th:text="${#numbers.formatDecimal(user.account.currentBalance, 1, 2)}">100£</span>
+                    <a href="/user/addMoney" class="linksDivs" id="topUpLink">Add Funds</a>
+                    <a href="/user/withdrawal" class="linksDivs" id="withdrawalLink">Withdraw Funds</a>
+                </h3>
+                <br>
             </div>
         </div>
         <div>
@@ -63,18 +63,20 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Your Buddies</th>
+                            <h3 class="formElement">Your Buddies</h3>
                         </tr>
                     </thead>
                     <tbody th:remove="all-but-first">
                         <tr th:each="connectionEmail : ${connectionsEmails}">
-                            <td th:text="${connectionEmail}">queti@queti.com</td>
+                            <td class="formElement" th:text="${connectionEmail}">queti@queti.com</td>
                         </tr>
                     </tbody>
                 </table>
+                <br>
             </div>
             <div>
-                <a href="/addConnection" class="linksDivs" id="addConnectionLink">Add A Buddy</a>
+                <a href="/user/addConnection" class="linksDivs" id="addConnectionLink">Add A Buddy</a>
+                <br class="formElement">
             </div>
         </div>
         <div>
@@ -82,27 +84,20 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Your IBANs</th>
+                            <h3 class="formElement">Your IBANs</h3>
                         </tr>
                     </thead>
                     <tbody th:remove="all-but-first">
                         <tr th:each="iban : ${ibans}">
-                            <td th:text="${iban.ibanString}">queti@queti.com</td>
+                            <td class="formElement" th:text="${iban.ibanString}">queti@queti.com</td>
                         </tr>
                     </tbody>
                 </table>
+                <br>
             </div>
             <div>
-                <a href="/addIban" class="linksDivs" id="addIbanLink">Add an Iban</a>
-            </div>
-        </div>
-
-        <div>
-            <div>
-                <h4>Your Account's Email:</h4>
-            </div>
-            <div>
-                <h4 th:text="${user.email}">queti@queti.co.uk</h4>
+                <a href="/user/addIban" class="linksDivs" id="addIbanLink">Add an Iban</a>
+                <br>
             </div>
         </div>
     </div>

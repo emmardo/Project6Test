@@ -9,21 +9,23 @@
 <div id="mainDiv">
     <div class="mainDivRows" id="headerRowDiv">
         <div class="headerRowDivs" id="iconDiv">
-            <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}"
-                 title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
+            <a href="/">
+                <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}"
+                     title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
+            </a>
         </div>
         <div class="headerRowDivs" id="linksDiv">
             <div>
-                <a href="/home" class="linksDivs" id="homeLink">Home</a>
+                <a href="/" class="linksDivs" id="homeLink">Home</a>
             </div>
             <div>
-                <a href="/transfer" class="linksDivs" id="transferLink">Transfer</a>
+                <a href="/user/transfer" class="linksDivs" id="transferLink">Transfer</a>
             </div>
             <div>
-                <a href="/profile" class="linksDivs" id="profileLink">Profile</a>
+                <a href="/user/profile" class="linksDivs" id="profileLink">Profile</a>
             </div>
             <div>
-                <a href="/contact" class="linksDivs" id="contactLink">Contact</a>
+                <a href="/user/contact" class="linksDivs" id="contactLink">Contact</a>
             </div>
             <div>
                 <a href="/logout" class="linksDivs" id="logoutLink">Logout</a>
@@ -47,32 +49,34 @@
                 <h4>Send Money</h4>
             </div>
             <div>
-                <button name="connectionButton" type="submit" value="Add Connection">Add A Buddy</button>
+                <button onclick="location.href='/user/addConnection'" name="connectionButton" type="button"
+                        value="Add Connection">Add A Buddy</button>
             </div>
         </div>
-        <div class="subRowsDivs" id="subRow2">
-            <form name="form" th:action="@{/transfer}" th:object="${request}" method="post">
-                <div>
-                    <select id="connectionsSelect" th:field="*{connectionEmail}" th:remove="all-but-first">
-                        <option th:each="connectionListElement : ${user.account.connectionListElements}"
-                                th:text="${connectionListElement.connection.user.email}"
-                                th:value="${connectionListElement.connection.user.email}">a@a.co.uk</option>
-                        <option >a@a.co.uk</option>
-                        <option>b@b.co.uk</option>
-                        <option>c@c.co.uk</option>
-                    </select>
-                </div>
-
-                <div>
-                    <input type="text" id="amount" name="amount" th:value="*{amount}"
-                           placeholder="How much?"/>
-                </div>
-                <div>
-                    <input type="text" id="description" name="description" th:value="*{description}"
-                           placeholder="Add a Description"/>
-                </div>
-                <div>
-                    <button name="payButton" type="submit" value="Pay">Pay</button>
+        <div class="subRowsDivs">
+            <form name="form" th:action="@{/user/transfer}" th:object="${request}" method="post">
+                <div id="subRow2">
+                    <div>
+                        <select id="connectionsSelect" th:field="*{connectionEmail}" th:remove="all-but-first">
+                            <option th:each="connectionListElement : ${user.account.connectionListElements}"
+                                    th:text="${connectionListElement.connection.user.email}"
+                                    th:value="${connectionListElement.connection.user.email}">a@a.co.uk</option>
+                            <option >a@a.co.uk</option>
+                            <option>b@b.co.uk</option>
+                            <option>c@c.co.uk</option>
+                        </select>
+                    </div>
+                    <div>
+                        <input type="text" id="amount" name="amount" th:value="*{amount}"
+                               placeholder="How much?"/>
+                    </div>
+                    <div>
+                        <input type="text" id="description" name="description" th:value="*{description}"
+                               placeholder="Add a Description"/>
+                    </div>
+                    <div>
+                        <button name="payButton" type="submit" value="Pay">Pay</button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -107,8 +111,6 @@
                 </tbody>
             </table>
         </div>
-        <div class="subRowsDivs" id="subRow5">PAGINATION GOES HERE</div>
-        <div class="subRowsDivs" id="subRow6"> EMPTY SPACE GOES HERE</div>
     </div>
 </div>
 </body>

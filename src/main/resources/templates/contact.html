@@ -9,20 +9,23 @@
 <div id="mainDiv">
     <div class="mainDivRows" id="headerRowDiv">
         <div class="headerRowDivs" id="iconDiv">
-            <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}" title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
+            <a href="/">
+                <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}"
+                     title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
+            </a>
         </div>
         <div class="headerRowDivs" id="linksDiv">
             <div>
-                <a href="/home" class="linksDivs" id="homeLink">Home</a>
+                <a href="/" class="linksDivs" id="homeLink">Home</a>
             </div>
             <div>
-                <a href="/transfer" class="linksDivs" id="transferLink">Transfer</a>
+                <a href="/user/transfer" class="linksDivs" id="transferLink">Transfer</a>
             </div>
             <div>
-                <a href="/profile" class="linksDivs" id="profileLink">Profile</a>
+                <a href="/user/profile" class="linksDivs" id="profileLink">Profile</a>
             </div>
             <div>
-                <a href="/contact" class="linksDivs" id="contactLink">Contact</a>
+                <a href="/user/contact" class="linksDivs" id="contactLink">Contact</a>
             </div>
             <div>
                 <a href="/logout" class="linksDivs" id="logoutLink">Logout</a>
@@ -43,10 +46,12 @@
     <div class="mainDivRows" id="mainRowDiv">
         <div>
             <div>
-                <h4>Don't Hesitate Getting in Touch if in Need, We'll be Happy to Help You!</h4>
+                <h2>Don't Hesitate Getting in Touch if in Need, We'll be Happy to Help You!</h2>
+                <br>
             </div>
             <div>
-                <h4>These are our Contact Details:</h4>
+                <h3>These are our Contact Details:</h3>
+                <br>
             </div>
         </div>
         <div>
@@ -55,6 +60,7 @@
             </div>
             <div>
                 <h4>32 Park Street, W2 1HJ, London, United Kingdom</h4>
+                <br>
             </div>
         </div>
         <div>
@@ -63,6 +69,7 @@
             </div>
             <div>
                 <h4>+44 (0) 50 80 50 80 50</h4>
+                <br>
             </div>
         </div>
         <div>
@@ -71,6 +78,7 @@
             </div>
             <div>
                 <h4>queti@queti.co.uk</h4>
+                <br>
             </div>
         </div>
     </div>

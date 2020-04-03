@@ -11,17 +11,32 @@
         <form name="form" th:action="@{/register}" th:object="${user}" method="post">
             <fieldset>
                 <div class="headerRowDivs" id="iconDiv">
-                    <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}" title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
+                    <a href="/">
+                        <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}"
+                             title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
+                    </a>
                 </div>
                 <div th:if="${param.error}" class="alert alert-error">Invalid Username or Password</div>
                 <div th:if="${param.logout}" class="alert alert-success">You have been logged out</div>
-                <div><input type="text" id="username" name="email" th:field="*{email}" placeholder="Email"/></div>
-                <div><input type="password" id="password" name="password" th:field="*{password}" placeholder="Password"/></div>
+                <div>
+                    <input class="formElement" type="text" id="username" name="email" th:field="*{email}"
+                           placeholder="Email"/>
+                </div>
+                <div>
+                    <input class="formElement" type="password" id="password" name="password" th:field="*{password}"
+                           placeholder="Password"/>
+                </div>
                 <div class="form-actions">
-                    <button type="submit" class="btn">Register</button>
+                    <button class="formElement" type="submit">Register</button>
                 </div>
             </fieldset>
         </form>
+    </div>
+    <div>
+        <p>Already have an Account? Login <a href="/login">here...</a></p>
+    </div>
+    <div>
+        <p>Or go <a href="/">back to the main page</a></p>
     </div>
 </div>
 </body>

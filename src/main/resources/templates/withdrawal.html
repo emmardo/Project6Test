@@ -9,20 +9,23 @@
 <div id="mainDiv">
     <div class="mainDivRows" id="headerRowDiv">
         <div class="headerRowDivs" id="iconDiv">
-            <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}" title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
+            <a href="/">
+                <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}"
+                     title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
+            </a>
         </div>
         <div class="headerRowDivs" id="linksDiv">
             <div>
-                <a href="/home" class="linksDivs" id="homeLink">Home</a>
+                <a href="/" class="linksDivs" id="homeLink">Home</a>
             </div>
             <div>
-                <a href="/transfer" class="linksDivs" id="transferLink">Transfer</a>
+                <a href="/user/transfer" class="linksDivs" id="transferLink">Transfer</a>
             </div>
             <div>
-                <a href="/profile" class="linksDivs" id="profileLink">Profile</a>
+                <a href="/user/profile" class="linksDivs" id="profileLink">Profile</a>
             </div>
             <div>
-                <a href="/contact" class="linksDivs" id="contactLink">Contact</a>
+                <a href="/user/contact" class="linksDivs" id="contactLink">Contact</a>
             </div>
             <div>
                 <a href="/logout" class="linksDivs" id="logoutLink">Logout</a>
@@ -47,18 +50,18 @@
             </div>
         </div>
         <div>
-            <form name="form" th:action="@{/withdrawal}" th:object="${request}" method="post">
+            <form name="form" th:action="@{/user/withdrawal}" th:object="${request}" method="post">
                 <div>
-                    <input type="text" id="moneyAmount" th:value="*{amount}" name="moneyAmount"
+                    <input class="formElement" type="text" id="moneyAmount" th:value="*{amount}" name="moneyAmount"
                            placeholder="Withdraw how much?"/>
                 </div>
                 <div>
-                    <select th:field="*{account}">
+                    <select class="formElement" th:field="*{account}">
                         <option th:each="iban : ${ibans}" th:text="${iban.ibanString}" th:value="${iban.ibanString}"></option>
                     </select>
                 </div>
                 <div>
-                    <button type="submit" class="btn">Withdraw Money</button>
+                    <button class="formElement" type="submit">Withdraw Money</button>
                 </div>
             </form>
         </div>

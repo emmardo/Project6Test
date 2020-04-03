@@ -9,20 +9,23 @@
 <div id="mainDiv">
     <div class="mainDivRows" id="headerRowDiv">
         <div class="headerRowDivs" id="iconDiv">
-            <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}" title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
+            <a href="/">
+                <img id="icon" src="../static/img/PayMyBuddyIcon.jpg" th:src="@{/img/PayMyBuddyIcon.jpg}"
+                     title="Pay My Buddy Icon" alt="Pay My Buddy Icon">
+            </a>
         </div>
         <div class="headerRowDivs" id="linksDiv">
             <div>
-                <a href="/home" class="linksDivs" id="homeLink">Home</a>
+                <a href="/" class="linksDivs" id="homeLink">Home</a>
             </div>
             <div>
-                <a href="/transfer" class="linksDivs" id="transferLink">Transfer</a>
+                <a href="/user/transfer" class="linksDivs" id="transferLink">Transfer</a>
             </div>
             <div>
-                <a href="/profile" class="linksDivs" id="profileLink">Profile</a>
+                <a href="/user/profile" class="linksDivs" id="profileLink">Profile</a>
             </div>
             <div>
-                <a href="/contact" class="linksDivs" id="contactLink">Contact</a>
+                <a href="/user/contact" class="linksDivs" id="contactLink">Contact</a>
             </div>
             <div>
                 <a href="/logout" class="linksDivs" id="logoutLink">Logout</a>
@@ -47,20 +50,20 @@
             </div>
         </div>
         <div>
-            <form name="form" th:action="@{/addMoney}" th:object="${transaction}" method="post">
+            <form name="form" th:action="@{/user/addMoney}" th:object="${transaction}" method="post">
                 <div >
-                    <input type="text" id="moneyAmount" name="moneyAmount" th:field="*{moneyAmount}"
+                    <input class="formElement" type="text" id="moneyAmount" name="moneyAmount" th:field="*{moneyAmount}"
                            placeholder="Add how much?"/>
                 </div>
                 <div>
-                    <select th:field="*{origin}">
+                    <select class="formElement" th:field="*{origin}">
                         <option value="Bank Account">Bank Account</option>
                         <option value="Debit Card">Debit Card</option>
                         <option value="Credit Card">Credit Card</option>
                     </select>
                 </div>
                 <div>
-                    <button type="submit" class="btn">Add Money</button>
+                    <button class="formElement" type="submit">Add Money</button>
                 </div>
             </form>
         </div>

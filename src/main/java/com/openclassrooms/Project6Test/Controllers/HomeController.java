@@ -88,76 +88,104 @@ public class HomeController {
         return modelAndView;
     }
 
-    @GetMapping("/profile")
+    @GetMapping("/user/profile")
     public ModelAndView profile(Authentication authentication) {
 
-        List<Iban> ibans = ibanService.getAllIbansByEmail(getUserFromAuthentication(authentication).getEmail());
+        ModelAndView modelAndView = new ModelAndView();
 
-        List<String> connectionsEmails = connectionListElementService.getAUsersConnectionsEmailsByUserEmail(
-                                            getUserFromAuthentication(authentication).getEmail());
+        if(authentication != null){
 
-        ModelAndView modelAndView = new ModelAndView("/profile");
-        modelAndView.addObject("user", getUserFromAuthentication(authentication));
-        modelAndView.addObject("ibans", ibans);
-        modelAndView.addObject("connectionsEmails", connectionsEmails);
+            List<Iban> ibans = ibanService.getAllIbansByEmail(getUserFromAuthentication(authentication).getEmail());
+
+            List<String> connectionsEmails = connectionListElementService.getAUsersConnectionsEmailsByUserEmail(
+                    getUserFromAuthentication(authentication).getEmail());
+
+            modelAndView.setViewName("profile");
+            modelAndView.addObject("user", getUserFromAuthentication(authentication));
+            modelAndView.addObject("ibans", ibans);
+            modelAndView.addObject("connectionsEmails", connectionsEmails);
+
+        }else{
+
+            RedirectView redirectView = new RedirectView();
+            redirectView.setUrl("/login");
+
+            modelAndView.setView(redirectView);
+        }
+
+
         return modelAndView;
     }
 
-    @GetMapping("/transfer")
+    @GetMapping("/user/transfer")
     public ModelAndView transferGet(@ModelAttribute("user")User user, Authentication authentication) {
 
-        List<TransactionDTO> dtos = new ArrayList<>();
+        ModelAndView modelAndView = new ModelAndView();
 
-        List<Transaction> transactions = transactionService.getAUsersTransactionsByEmail(
-                getUserFromAuthentication(authentication).getEmail());
+        if(authentication != null) {
 
-        if(!transactions.isEmpty()) {
+            List<TransactionDTO> dtos = new ArrayList<>();
 
-            for(Transaction transaction : transactions) {
+            List<Transaction> transactions = transactionService.getAUsersTransactionsByEmail(
+                    getUserFromAuthentication(authentication).getEmail());
 
-                TransactionDTO dto = new TransactionDTO();
+            if(!transactions.isEmpty()) {
 
-                dto.setAmount(transaction.getMoneyAmount());
+                for(Transaction transaction : transactions) {
 
-                if(transaction.getTransactionType().getTransactionType().equals("TopUp")) {
+                    TransactionDTO dto = new TransactionDTO();
 
-                    dto.setDescription(transaction.getDescription() + " - " + transaction.getOrigin());
+                    dto.setAmount(transaction.getMoneyAmount());
+
+                    if(transaction.getTransactionType().getTransactionType().equals("TopUp")) {
+
+                        dto.setDescription(transaction.getDescription() + " - " + transaction.getOrigin());
+                    }
+
+                    if(transaction.getTransactionType().getTransactionType().equals("Withdrawal")) {
+
+                        dto.setDescription(transaction.getDescription() + " - " + transaction.getIban().getIbanString());
+                    }
+
+                    if(transaction.getTransactionType().getTransactionType().equals("Regular")) {
+
+                        dto.setDescription(transaction.getDescription());
+                    }
+
+                    if(transaction.getConnection() == null) {
+
+                        dto.setConnectionEmail("");
+                    }else{
+                        dto.setConnectionEmail(transaction.getConnection().getUser().getEmail());
+                    }
+
+                    dtos.add(dto);
                 }
-
-                if(transaction.getTransactionType().getTransactionType().equals("Withdrawal")) {
-
-                    dto.setDescription(transaction.getDescription() + " - " + transaction.getIban().getIbanString());
-                }
-
-                if(transaction.getTransactionType().getTransactionType().equals("Regular")) {
-
-                    dto.setDescription(transaction.getDescription());
-                }
-
-                if(transaction.getConnection() == null) {
-
-                    dto.setConnectionEmail("");
-                }else{
-                    dto.setConnectionEmail(transaction.getConnection().getUser().getEmail());
-                }
-
-                dtos.add(dto);
             }
+
+            if(dtos.isEmpty()){
+
+                dtos.add(new TransactionDTO("No Transactions Yet", "No Transactions Yet", 0.0f));
+            }
+
+            modelAndView.setViewName("transfer");
+            modelAndView.addObject("transactions", dtos);
+            modelAndView.addObject("request", new TransactionDTO());
+            modelAndView.addObject("user", getUserFromAuthentication(authentication));
+
+        }else{
+
+            RedirectView redirectView = new RedirectView();
+            redirectView.setUrl("/login");
+
+            modelAndView.setView(redirectView);
         }
 
-        if(dtos.isEmpty()){
 
-            dtos.add(new TransactionDTO("No Transactions Yet", "No Transactions Yet", 0.0f));
-        }
-
-        ModelAndView modelAndView = new ModelAndView("/transfer");
-        modelAndView.addObject("transactions", dtos);
-        modelAndView.addObject("request", new TransactionDTO());
-        modelAndView.addObject("user", getUserFromAuthentication(authentication));
         return modelAndView;
     }
 
-    @PostMapping("/transfer")
+    @PostMapping("/user/transfer")
     public ModelAndView transferPost(@ModelAttribute("request")TransactionDTO request, Authentication authentication) {
 
         transactionService.createTransactionByTransactionType(
@@ -165,21 +193,34 @@ public class HomeController {
                 request.getAmount(), request.getConnectionEmail(), request.getDescription());
 
         RedirectView redirectView = new RedirectView();
-        redirectView.setUrl("/profile");
+        redirectView.setUrl("/user/profile");
 
         return new ModelAndView(redirectView);
     }
 
-    @GetMapping("/addConnection")
-    public ModelAndView addConnectionGet(@ModelAttribute("connectionListElement") ConnectionListElement connectionListElement) {
+    @GetMapping("/user/addConnection")
+    public ModelAndView addConnectionGet(@ModelAttribute("connectionListElement") ConnectionListElement connectionListElement,
+                                         Authentication authentication) {
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("addConnection");
-        modelAndView.addObject("connectionListElement", connectionListElement);
+
+        if(authentication != null) {
+
+            modelAndView.setViewName("addConnection");
+            modelAndView.addObject("connectionListElement", connectionListElement);
+
+        }else{
+
+            RedirectView redirectView = new RedirectView();
+            redirectView.setUrl("/login");
+
+            modelAndView.setView(redirectView);
+        }
+
         return modelAndView;
     }
 
-    @PostMapping("/addConnection")
+    @PostMapping("/user/addConnection")
     public ModelAndView addConnection(@ModelAttribute("connectionListElement") ConnectionListElement connectionListElement,
                                       Authentication authentication) {
 
@@ -187,21 +228,33 @@ public class HomeController {
                 connectionListElement.getConnection().getUser().getEmail());
 
         RedirectView redirectView = new RedirectView();
-        redirectView.setUrl("/profile");
+        redirectView.setUrl("/user/profile");
 
         return new ModelAndView(redirectView);
     }
 
-    @GetMapping("/addMoney")
-    public ModelAndView addMoneyGet(@ModelAttribute("transaction")Transaction transaction) {
+    @GetMapping("/user/addMoney")
+    public ModelAndView addMoneyGet(@ModelAttribute("transaction")Transaction transaction, Authentication authentication) {
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("addMoney");
-        modelAndView.addObject("transaction", transaction);
+
+        if(authentication != null) {
+
+            modelAndView.setViewName("addMoney");
+            modelAndView.addObject("transaction", transaction);
+
+        }else{
+
+            RedirectView redirectView = new RedirectView();
+            redirectView.setUrl("/login");
+
+            modelAndView.setView(redirectView);
+        }
+
         return modelAndView;
     }
 
-    @PostMapping("/addMoney")
+    @PostMapping("/user/addMoney")
     public ModelAndView addMoneyPost(@ModelAttribute("transaction")Transaction transaction,
                                  Authentication authentication) {
 
@@ -212,41 +265,65 @@ public class HomeController {
                 "Top Up");
 
         RedirectView redirectView = new RedirectView();
-        redirectView.setUrl("/profile");
+        redirectView.setUrl("/user/profile");
 
         return new ModelAndView(redirectView);
     }
 
-    @GetMapping("/addIban")
-    public ModelAndView addIbanGet() {
+    @GetMapping("/user/addIban")
+    public ModelAndView addIbanGet(Authentication authentication) {
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("addIban");
+
+        if(authentication != null) {
+
+            modelAndView.setViewName("addIban");
+
+        }else{
+
+            RedirectView redirectView = new RedirectView();
+            redirectView.setUrl("/login");
+
+            modelAndView.setView(redirectView);
+        }
+
         return modelAndView;
     }
 
-    @PostMapping("/addIban")
+    @PostMapping("/user/addIban")
     public ModelAndView addIbanPost(@RequestParam String ibanString, Authentication authentication) {
 
         ibanService.createIban(getUserFromAuthentication(authentication).getEmail(), ibanString);
 
         RedirectView redirectView = new RedirectView();
-        redirectView.setUrl("/addIban");
+        redirectView.setUrl("/user/addIban");
 
         return new ModelAndView(redirectView);
     }
 
-    @GetMapping("/withdrawal")
+    @GetMapping("/user/withdrawal")
     public ModelAndView withdrawalGet(Authentication authentication) {
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("withdrawal");
-        modelAndView.addObject("ibans", getUserFromAuthentication(authentication).getAccount().getIbans());
-        modelAndView.addObject("request", new WithdrawalDTO());
+
+        if(authentication != null) {
+
+            modelAndView.setViewName("withdrawal");
+            modelAndView.addObject("ibans", getUserFromAuthentication(authentication).getAccount().getIbans());
+            modelAndView.addObject("request", new WithdrawalDTO());
+
+        }else{
+
+            RedirectView redirectView = new RedirectView();
+            redirectView.setUrl("/login");
+
+            modelAndView.setView(redirectView);
+        }
+
         return modelAndView;
     }
 
-    @PostMapping("/withdrawal")
+    @PostMapping("/user/withdrawal")
     public ModelAndView withdrawalPost(@ModelAttribute("moneyAmount") String moneyAmount,
                                        @ModelAttribute("account") String iban,
                                        Authentication authentication) {
@@ -256,16 +333,28 @@ public class HomeController {
                 Float.parseFloat(moneyAmount), iban, "Withdrawal");
 
         RedirectView redirectView = new RedirectView();
-        redirectView.setUrl("/profile");
+        redirectView.setUrl("/user/profile");
 
         return new ModelAndView(redirectView);
     }
 
-    @GetMapping("/contact")
-    public ModelAndView contact() {
+    @GetMapping("/user/contact")
+    public ModelAndView contact(Authentication authentication) {
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("contact");
+
+        if(authentication != null) {
+
+            modelAndView.setViewName("contact");
+
+        }else{
+
+            RedirectView redirectView = new RedirectView();
+            redirectView.setUrl("/login");
+
+            modelAndView.setView(redirectView);
+        }
+
         return modelAndView;
     }
 }
