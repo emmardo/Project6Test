@@ -1,6 +1,7 @@
 package com.openclassrooms.Project6Test.Controllers;
 
 import com.openclassrooms.Project6Test.Models.*;
+import com.openclassrooms.Project6Test.Repositories.TransactionRepository;
 import com.openclassrooms.Project6Test.Services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/")
@@ -25,12 +27,13 @@ public class HomeController {
     private MyUserDetailsService myUserDetailsService;
     private TransactionService transactionService;
     private IbanService ibanService;
+    private TransactionRepository transactionRepository;
 
     @Autowired
     public HomeController(UserService userService, ConnectionService connectionService,
                           ConnectionListElementService connectionListElementService,
                           MyUserDetailsService myUserDetailsService, TransactionService transactionService,
-                          IbanService ibanService) {
+                          IbanService ibanService, TransactionRepository transactionRepository) {
 
         this.userService = userService;
         this.connectionService = connectionService;
@@ -38,6 +41,7 @@ public class HomeController {
         this.myUserDetailsService = myUserDetailsService;
         this.transactionService = transactionService;
         this.ibanService = ibanService;
+        this.transactionRepository = transactionRepository;
     }
 
     @ModelAttribute
@@ -129,7 +133,38 @@ public class HomeController {
             List<Transaction> transactions = transactionService.getAUsersTransactionsByEmail(
                     getUserFromAuthentication(authentication).getEmail());
 
-            if(!transactions.isEmpty()) {
+            if(getUserFromAuthentication(authentication).getRole().getRole().equals("Company")
+                    && !transactionRepository.findAll().stream()
+                    .filter(t -> t.getTransactionType().getTransactionType()
+                            .equals("Regular")).collect(Collectors.toList()).isEmpty()) {
+
+                List<Transaction> regularTransactions = transactionRepository.findAll().stream()
+                                                        .filter(t -> t.getTransactionType().getTransactionType()
+                                                                .equals("Regular")).collect(Collectors.toList());
+
+                for(Transaction transaction : regularTransactions) {
+
+                    if(transaction.getTransactionType().getTransactionType().equals("Regular")) {
+
+                        TransactionDTO dto = new TransactionDTO();
+
+                        dto.setDescription(transaction.getMadeAt().toString());
+
+                        dto.setAmount(transaction.getMoneyAmount());
+
+                        dto.setConnectionEmail(transaction.getAccount().getUser().getEmail());
+
+                        dtos.add(dto);
+
+                        modelAndView.setViewName("transfer");
+                        modelAndView.addObject("transactions", dtos);
+                        modelAndView.addObject("request", new TransactionDTO());
+                        modelAndView.addObject("user", getUserFromAuthentication(authentication));
+                    }
+                }
+
+            } else if(!transactions.isEmpty() &&
+                    !getUserFromAuthentication(authentication).getRole().getRole().equals("Company")) {
 
                 for(Transaction transaction : transactions) {
 
@@ -155,7 +190,9 @@ public class HomeController {
                     if(transaction.getConnection() == null) {
 
                         dto.setConnectionEmail("");
+
                     }else{
+
                         dto.setConnectionEmail(transaction.getConnection().getUser().getEmail());
                     }
 
@@ -180,7 +217,6 @@ public class HomeController {
 
             modelAndView.setView(redirectView);
         }
-
 
         return modelAndView;
     }

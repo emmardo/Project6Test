@@ -34,16 +34,17 @@ public class ConnectionListElementService {
 
     public void createConnectionListElement(String userEmail, String connectionEmail) {
 
-        if(connectionListElementRepository.findConnectionListElementsByAccountUserEmail(userEmail).stream().filter(
-                element -> element.getConnection().getUser().getEmail().equals(connectionEmail)).findFirst()
+        if(connectionListElementRepository.findConnectionListElementsByAccountUserEmail(userEmail).stream().noneMatch(
+                element -> element.getConnection().getUser().getEmail().equals(connectionEmail))) {
 
-        Account account = accountRepository.findAccountByUserEmail(userEmail);
+            Account account = accountRepository.findAccountByUserEmail(userEmail);
 
-        Connection connection = connectionRepository.findConnectionByUserEmail(connectionEmail);
+            Connection connection = connectionRepository.findConnectionByUserEmail(connectionEmail);
 
-        ConnectionListElement connectionListElement = new ConnectionListElement(account, connection);
+            ConnectionListElement connectionListElement = new ConnectionListElement(account, connection);
 
-        connectionListElementRepository.save(connectionListElement);
+            connectionListElementRepository.save(connectionListElement);
+        }
     }
 
     public ConnectionListElement getConnectionListElementByConnectionEmail(String userEmail, String connectionEmail) {
