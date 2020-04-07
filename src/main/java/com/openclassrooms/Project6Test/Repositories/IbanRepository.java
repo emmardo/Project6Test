@@ -9,11 +9,5 @@ import java.util.List;
 @Repository
 public interface IbanRepository extends JpaRepository<Iban, Integer> {
 
-    /*Iban findById(int ibanId);*/
-
     List<Iban> findByAccount_UserEmail(String email);
-
-    /*void deleteIbanByIban(String iban);
-
-    void deleteAllByAccountUserEmail(String email);*/
 }
