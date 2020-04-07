@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
-import java.util.Date;
 
 @Service
 public class UserService {
@@ -14,8 +13,6 @@ public class UserService {
     private UserRepository userRepository;
 
     private RoleRepository roleRepository;
-
-    private UserModificationTypeRepository userModificationTypeRepository;
 
     private AccountRepository accountRepository;
 
@@ -29,28 +26,22 @@ public class UserService {
 
     private TransactionTypeRepository transactionTypeRepository;
 
-    private UserModificationRegisterRepository userModificationRegisterRepository;
-
 
     @Autowired
     public UserService(UserRepository userRepository, RoleRepository roleRepository,
-                       UserModificationTypeRepository userModificationTypeRepository,
                        AccountRepository accountRepository, AccountTypeRepository accountTypeRepository,
                        AccountStatusRepository accountStatusRepository, ConnectionRepository connectionRepository,
                        ConnectionTypeRepository connectionTypeRepository,
-                       TransactionTypeRepository transactionTypeRepository,
-                       UserModificationRegisterRepository userModificationRegisterRepository) {
+                       TransactionTypeRepository transactionTypeRepository) {
 
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.userModificationTypeRepository = userModificationTypeRepository;
         this.accountRepository = accountRepository;
         this.accountTypeRepository = accountTypeRepository;
         this.accountStatusRepository = accountStatusRepository;
         this.connectionRepository = connectionRepository;
         this.connectionTypeRepository = connectionTypeRepository;
         this.transactionTypeRepository = transactionTypeRepository;
-        this.userModificationRegisterRepository = userModificationRegisterRepository;
     }
 
 
@@ -66,18 +57,6 @@ public class UserService {
             userRepository.save(user);
 
             if(userRole != "Admin") {
-
-                /*//Create AccountType
-                String accountTypeString = userRole;
-                AccountType accountType = new AccountType(accountTypeString);
-
-                //Create AccountStatus
-                String accountStatusString = "Active";
-                AccountStatus accountStatus = new AccountStatus(accountStatusString);
-
-                //Create ConnectionType
-                String connectionTypeString = userRole;
-                ConnectionType connectionType = new ConnectionType(connectionTypeString);*/
 
                 //Create Connection
                 Connection connection = new Connection(
@@ -107,72 +86,6 @@ public class UserService {
         }
 
         return newUser;
-    }
-
-    /*public List<User> getAllUsersByRole(String role) {
-
-        return userRepository.findAll().stream().filter(u -> u.getRole().getRole().equals(role))
-                .collect(Collectors.toList());
-    }*/
-
-    public void updateUsersEmailAddress(String currentEmailAddress, String password, String newEmailAddress) {
-
-        if(userAccountExistenceValidatorByEmail(currentEmailAddress)
-                && passwordValidator(currentEmailAddress, password)) {
-
-            User user = getUserByEmail(currentEmailAddress);
-            user.setEmail(newEmailAddress);
-
-            Date date = new Date();
-            user.setUpdatedAt(date);
-
-            userRepository.save(user);
-
-            UserModificationType userModificationType = userModificationTypeRepository
-                                                        .findUserModificationTypeByUserModificationType("Email");
-
-            UserModificationRegister userModificationRegister = new UserModificationRegister
-                                                                    (user, userModificationType, date);
-            userModificationRegister.setPreviousDetails(currentEmailAddress);
-            userModificationRegister.setNewDetails(newEmailAddress);
-
-            userModificationRegisterRepository.save(userModificationRegister);
-        }
-    }
-
-    public void updateUsersPassword(String emailAddress, String currentPassword, String newPassword) {
-
-        if(userAccountExistenceValidatorByEmail(emailAddress) && passwordValidator(emailAddress, currentPassword)) {
-
-            User user = getUserByEmail(emailAddress);
-            user.setPassword(newPassword);
-
-            Date date = new Date();
-            user.setUpdatedAt(date);
-
-            userRepository.save(user);
-
-            UserModificationType userModificationType = userModificationTypeRepository
-                                                        .findUserModificationTypeByUserModificationType("Password");
-
-            UserModificationRegister userModificationRegister = new UserModificationRegister
-                                                                    (user, userModificationType, date);
-
-            userModificationRegisterRepository.save(userModificationRegister);
-        }
-    }
-
-
-    public void deleteUserByEmail(String userEmail, String password) {
-
-        if(userAccountExistenceValidatorByEmail(userEmail) && passwordValidator(userEmail, password)) {
-
-            accountRepository.delete(accountRepository.findAccountByUserEmail(userEmail));
-
-            connectionRepository.delete(connectionRepository.findConnectionByUserEmail(userEmail));
-
-            userRepository.delete(userRepository.findUserByEmail(userEmail));
-        }
     }
 
 
@@ -207,32 +120,10 @@ public class UserService {
         return value;
     }
 
-    public boolean passwordValidator(String email, String password) {
-
-        boolean value = false;
-
-        if((email != null || !email.isEmpty())
-            && (password != null || !password.isEmpty())
-            && userAccountExistenceValidatorByEmail(email)) {
-
-            if(userRepository.findUserByEmail(email).getPassword().equals(password)) {
-
-                value = true;
-            }
-        }
-
-        return value;
-    }
-
     public void entityTypesExistenceChecker() {
 
         if(roleRepository.findAll().isEmpty()){
             roleRepository.saveAll(Arrays.asList(new Role("Company"), new Role("Admin"), new Role("Regular")));
-        }
-
-        if(userModificationTypeRepository.findAll().isEmpty()){
-            userModificationTypeRepository.saveAll(
-                    Arrays.asList(new UserModificationType("Email"), new UserModificationType("Password")));
         }
 
         if(accountTypeRepository.findAll().isEmpty()){

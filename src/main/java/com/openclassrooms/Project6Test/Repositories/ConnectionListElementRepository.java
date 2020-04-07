@@ -10,6 +10,4 @@ import java.util.List;
 public interface ConnectionListElementRepository extends JpaRepository<ConnectionListElement, Integer> {
 
     List<ConnectionListElement> findConnectionListElementsByAccountUserEmail(String userEmail);
-
-    ConnectionListElement findConnectionListElementByConnectionUserEmail(String connectionEmail);
 }

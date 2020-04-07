@@ -8,7 +8,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "user", catalog = "pay_my_buddy")
@@ -42,9 +41,6 @@ public class User {
 
     @Type(type = "numeric_boolean")
     private boolean active;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<UserModificationRegister> userModificationRegisters;
 
     //changed mapped from "account"
     @OneToOne(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -110,14 +106,6 @@ public class User {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public List<UserModificationRegister> getUserModificationRegisters() {
-        return userModificationRegisters;
-    }
-
-    public void setUserModificationRegisters(List<UserModificationRegister> userModificationRegisters) {
-        this.userModificationRegisters = userModificationRegisters;
     }
 
     public Account getAccount() {

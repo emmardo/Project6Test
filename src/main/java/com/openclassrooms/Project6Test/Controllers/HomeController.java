@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 public class HomeController {
 
     private UserService userService;
-    private ConnectionService connectionService;
     private ConnectionListElementService connectionListElementService;
     private MyUserDetailsService myUserDetailsService;
     private TransactionService transactionService;
@@ -30,13 +29,11 @@ public class HomeController {
     private TransactionRepository transactionRepository;
 
     @Autowired
-    public HomeController(UserService userService, ConnectionService connectionService,
-                          ConnectionListElementService connectionListElementService,
+    public HomeController(UserService userService, ConnectionListElementService connectionListElementService,
                           MyUserDetailsService myUserDetailsService, TransactionService transactionService,
                           IbanService ibanService, TransactionRepository transactionRepository) {
 
         this.userService = userService;
-        this.connectionService = connectionService;
         this.connectionListElementService = connectionListElementService;
         this.myUserDetailsService = myUserDetailsService;
         this.transactionService = transactionService;

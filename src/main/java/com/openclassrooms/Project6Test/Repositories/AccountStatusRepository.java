@@ -7,7 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AccountStatusRepository extends JpaRepository<AccountStatus, Integer> {
 
-    AccountStatus findAccountStatusById(int id);
-
     AccountStatus findAccountStatusByAccountStatus(String accountStatus);
 }

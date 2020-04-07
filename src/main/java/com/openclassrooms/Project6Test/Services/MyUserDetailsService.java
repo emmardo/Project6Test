@@ -1,6 +1,5 @@
 package com.openclassrooms.Project6Test.Services;
 
-import com.openclassrooms.Project6Test.Models.Account;
 import com.openclassrooms.Project6Test.Models.MyUserDetails;
 import com.openclassrooms.Project6Test.Models.User;
 import com.openclassrooms.Project6Test.Repositories.AccountRepository;

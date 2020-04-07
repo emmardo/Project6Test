@@ -72,21 +72,4 @@ public class ConnectionListElementService {
 
         return connectionsEmails;
     }
-
-    public void updateConnectionListElementsConnection(String oldConnectionEmail, String newConnectionEmail) {
-
-        ConnectionListElement element = connectionListElementRepository
-                                        .findConnectionListElementByConnectionUserEmail(oldConnectionEmail);
-
-        element.setConnection(connectionRepository.findConnectionByUserEmail(newConnectionEmail));
-
-        connectionListElementRepository.save(element);
-    }
-
-    public void deleteConnectionListElementByConnectionEmail(String userEmail, String connectionEmail) {
-
-        ConnectionListElement element = getConnectionListElementByConnectionEmail(userEmail, connectionEmail);
-
-        connectionListElementRepository.delete(element);
-    }
 }
