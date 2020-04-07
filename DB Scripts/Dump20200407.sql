@@ -328,61 +328,6 @@ LOCK TABLES `user` WRITE;
 INSERT INTO `user` VALUES (22,3,'111@111.com','$2a$10$O4dIbG/qY8v.Sh1AsmANfuZnl7uP3RUELyLLIHfbXmZlAA6fXPGLS','2020-04-01 22:26:26',NULL,1),(23,3,'123@123.com','$2a$10$lp9SwxFamwOWsj5lezkGzOorvzfaYytdgqrck3OO4J7DiYLHj6OMu','2020-04-01 22:26:35',NULL,1),(24,3,'222@222.com','$2a$10$mSzI4jtm6d.fYRQiUySeLOEFCoTynszL7JDdqKcfQS3Bxq4qS1RQu','2020-04-01 22:26:42',NULL,1),(25,1,'000@000.com','$2y$12$/tOHObCFEU3XHPNdmRvTOOsZGUtogAfcQRROQy9B30znvufiKmCOm','2020-04-01 22:26:42',NULL,1);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `user_modification_register`
---
-
-DROP TABLE IF EXISTS `user_modification_register`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `user_modification_register` (
-  `user_modification_register_id` int(11) NOT NULL AUTO_INCREMENT,
-  `fk_user_id` int(11) DEFAULT NULL,
-  `fk_user_modification_type_id` int(11) DEFAULT NULL,
-  `made_at` datetime NOT NULL,
-  `previous_details` varchar(45) DEFAULT NULL,
-  `new_details` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`user_modification_register_id`),
-  KEY `user_modification_type_fk_user_modification_type_id_idx` (`fk_user_modification_type_id`),
-  KEY `user_fk_user_id_idx` (`fk_user_id`),
-  CONSTRAINT `user_modification_register_fk_user_id` FOREIGN KEY (`fk_user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE,
-  CONSTRAINT `user_modification_register_fk_user_modification_type_id` FOREIGN KEY (`fk_user_modification_type_id`) REFERENCES `user_modification_type` (`user_modification_type_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user_modification_register`
---
-
-LOCK TABLES `user_modification_register` WRITE;
-/*!40000 ALTER TABLE `user_modification_register` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user_modification_register` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `user_modification_type`
---
-
-DROP TABLE IF EXISTS `user_modification_type`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `user_modification_type` (
-  `user_modification_type_id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_modification_type` varchar(45) NOT NULL,
-  PRIMARY KEY (`user_modification_type_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user_modification_type`
---
-
-LOCK TABLES `user_modification_type` WRITE;
-/*!40000 ALTER TABLE `user_modification_type` DISABLE KEYS */;
-INSERT INTO `user_modification_type` VALUES (1,'Email'),(2,'Password');
-/*!40000 ALTER TABLE `user_modification_type` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -393,4 +338,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-07 19:20:00
+-- Dump completed on 2020-04-07 20:43:32
