@@ -57,7 +57,7 @@ public class Iban {
         return ibanString;
     }
 
-    public void setIbanString(String iban) {
+    public void setIbanString(String ibanString) {
         this.ibanString = ibanString;
     }
 

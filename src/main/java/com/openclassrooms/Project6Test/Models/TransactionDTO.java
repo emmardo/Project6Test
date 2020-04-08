@@ -3,7 +3,9 @@ package com.openclassrooms.Project6Test.Models;
 public class TransactionDTO {
 
     private String connectionEmail;
+
     private String description;
+
     private float amount;
 
     public TransactionDTO() {

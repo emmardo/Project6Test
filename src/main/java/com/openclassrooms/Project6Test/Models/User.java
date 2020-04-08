@@ -26,7 +26,6 @@ public class User {
     @Email
     private String email;
 
-    /*@Size(min = 8, max = 25)*/
     private String password;
 
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -42,11 +41,9 @@ public class User {
     @Type(type = "numeric_boolean")
     private boolean active;
 
-    //changed mapped from "account"
     @OneToOne(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Account account;
 
-    //changed mapped from "connection"
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Connection connection;
 

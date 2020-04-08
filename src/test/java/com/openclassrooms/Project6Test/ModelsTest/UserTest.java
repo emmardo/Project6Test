@@ -24,13 +24,9 @@ public class UserTest {
 
     private Date updatedAt = new Date();
 
-    private List<UserModificationRegister> userModificationRegisters = new ArrayList<>();
-
     private Account account = new Account();
 
     private Connection connection = new Connection();
-
-    private UserModificationRegister userModificationRegister = new UserModificationRegister();
 
     @Test
     public void parameterizedConstructor() {
@@ -120,21 +116,6 @@ public class UserTest {
 
         //Assert
         assertEquals(updatedAt, newUser.getUpdatedAt());
-    }
-
-    @Test
-    public void setUserModificationRegisters() {
-
-        //Arrange
-        User newUser = new User();
-
-        userModificationRegisters.add(userModificationRegister);
-
-        //Act
-        newUser.setUserModificationRegisters(userModificationRegisters);
-
-        //Assert
-        assertEquals(userModificationRegisters, newUser.getUserModificationRegisters());
     }
 
     @Test

@@ -11,6 +11,7 @@ import java.util.List;
 public class MyUserDetails implements UserDetails {
 
     private User user;
+
     private List<GrantedAuthority> authorities;
 
     public MyUserDetails(User user, Role role) {

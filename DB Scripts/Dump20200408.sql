@@ -47,7 +47,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (22,22,1,1,22,149.5),(23,23,1,1,23,149.75),(24,24,1,1,24,100),(25,25,2,1,25,0.75);
+INSERT INTO `account` VALUES (22,22,1,1,22,99.25),(23,23,1,1,23,199.75),(24,24,1,1,24,100),(25,25,2,1,25,1);
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -153,7 +153,7 @@ CREATE TABLE `connection_list_element` (
 
 LOCK TABLES `connection_list_element` WRITE;
 /*!40000 ALTER TABLE `connection_list_element` DISABLE KEYS */;
-INSERT INTO `connection_list_element` VALUES (2,22,23),(3,22,24),(4,22,24),(5,23,22);
+INSERT INTO `connection_list_element` VALUES (2,22,23),(3,22,24),(5,23,22);
 /*!40000 ALTER TABLE `connection_list_element` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -260,7 +260,7 @@ CREATE TABLE `transaction` (
   CONSTRAINT `transaction_fk_connection_id` FOREIGN KEY (`fk_connection_id`) REFERENCES `connection` (`connection_id`) ON DELETE CASCADE,
   CONSTRAINT `transaction_fk_iban_id` FOREIGN KEY (`fk_iban_id`) REFERENCES `iban` (`iban_id`) ON DELETE CASCADE,
   CONSTRAINT `transaction_fk_transaction_type_id` FOREIGN KEY (`fk_transaction_type_id`) REFERENCES `transaction_type` (`transaction_type_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -269,7 +269,7 @@ CREATE TABLE `transaction` (
 
 LOCK TABLES `transaction` WRITE;
 /*!40000 ALTER TABLE `transaction` DISABLE KEYS */;
-INSERT INTO `transaction` VALUES (11,2,22,NULL,NULL,100,0,100,'2020-04-02 21:24:39','Bank Account','TopUp'),(12,2,22,NULL,NULL,200,0,100,'2020-04-02 21:24:47','Credit Card','TopUp'),(13,3,22,NULL,3,300,0,50,'2020-04-02 21:54:11',NULL,'Withdrawal'),(14,1,22,23,NULL,250,100,100,'2020-04-02 22:18:32',NULL,'Gift'),(15,3,22,NULL,3,149.5,0,50,'2020-04-03 14:39:23',NULL,'Withdrawal'),(16,1,23,22,NULL,200,99.5,50,'2020-04-03 14:41:57',NULL,'Birthday Gift');
+INSERT INTO `transaction` VALUES (11,2,22,NULL,NULL,100,0,100,'2020-04-02 21:24:39','Bank Account','TopUp'),(12,2,22,NULL,NULL,200,0,100,'2020-04-02 21:24:47','Credit Card','TopUp'),(13,3,22,NULL,3,300,0,50,'2020-04-02 21:54:11',NULL,'Withdrawal'),(14,1,22,23,NULL,250,100,100,'2020-04-02 22:18:32',NULL,'Gift'),(15,3,22,NULL,3,149.5,0,50,'2020-04-03 14:39:23',NULL,'Withdrawal'),(16,1,23,22,NULL,200,99.5,50,'2020-04-03 14:41:57',NULL,'Birthday Gift'),(17,1,22,23,NULL,149.5,149.75,50,'2020-04-08 01:15:14',NULL,'Shoes');
 /*!40000 ALTER TABLE `transaction` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -338,4 +338,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-07 20:43:32
+-- Dump completed on 2020-04-08  1:17:47

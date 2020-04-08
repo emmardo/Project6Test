@@ -3,6 +3,8 @@ package com.openclassrooms.Project6Test.Services;
 import com.openclassrooms.Project6Test.Models.*;
 import com.openclassrooms.Project6Test.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -86,6 +88,13 @@ public class UserService {
         }
 
         return newUser;
+    }
+
+    public User getUserFromAuthentication(Authentication authentication) {
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        return getUserByEmail(userDetails.getUsername());
     }
 
 

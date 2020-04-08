@@ -47,12 +47,6 @@ public class ConnectionListElementService {
         }
     }
 
-    public ConnectionListElement getConnectionListElementByConnectionEmail(String userEmail, String connectionEmail) {
-
-        return getConnectionListElementsByUserEmail(userEmail).stream().filter(c -> c.getConnection().getUser()
-                .getEmail().equals(connectionEmail)).findFirst().get();
-    }
-
     public List<ConnectionListElement> getConnectionListElementsByUserEmail(String userEmail) {
 
         return connectionListElementRepository.findConnectionListElementsByAccountUserEmail(userEmail);
