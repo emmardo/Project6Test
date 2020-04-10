@@ -15,9 +15,10 @@ public class ConnectionTypeTest {
 
     private String connectionType = "";
 
+    private Connection connection = new Connection();
+
     private List<Connection> connections = new ArrayList<>();
 
-    private Connection connection = new Connection();
 
     @Test
     public void parameterizedConstructor() {

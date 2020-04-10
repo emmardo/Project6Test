@@ -16,21 +16,21 @@ public class IbanTest {
 
     private Account account = new Account();
 
-    private String iban = "";
-
-    private List<Transaction> transactions = new ArrayList<>();
+    private String ibanString = "";
 
     private Transaction transaction = new Transaction();
+
+    private List<Transaction> transactions = new ArrayList<>();
 
     @Test
     public void parameterizedConstructor() {
 
         //Act
-        Iban newIban = new Iban(account, iban);
+        Iban newIban = new Iban(account, ibanString);
 
         //Assert
         assertEquals(account, newIban.getAccount());
-        assertEquals(iban, newIban.getIbanString());
+        assertEquals(ibanString, newIban.getIbanString());
     }
 
     @Test
@@ -66,10 +66,10 @@ public class IbanTest {
         Iban newIban = new Iban();
 
         //Act
-        newIban.setIbanString(iban);
+        newIban.setIbanString(ibanString);
 
         //Assert
-        assertEquals(iban, newIban.getIbanString());
+        assertEquals(ibanString, newIban.getIbanString());
     }
 
     @Test

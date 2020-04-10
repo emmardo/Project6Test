@@ -2,6 +2,7 @@ package com.openclassrooms.Project6Test.ModelsTest;
 
 import com.openclassrooms.Project6Test.Models.Account;
 import com.openclassrooms.Project6Test.Models.AccountStatus;
+import com.openclassrooms.Project6Test.Models.AccountType;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class AccountTypeTest {
 
     private int id = 1;
 
-    private String accountStatus = "";
+    private String accountType = "";
 
     private List<Account> accounts = new ArrayList<>();
 
@@ -23,10 +24,10 @@ public class AccountTypeTest {
     public void parameterizedConstructor() {
 
         //Act
-        AccountStatus newAccountStatus = new AccountStatus(accountStatus);
+        AccountType newAccountType = new AccountType(accountType);
 
         //Assert
-        assertEquals(accountStatus, newAccountStatus.getAccountStatus());
+        assertEquals(accountType, newAccountType.getAccountType());
     }
 
     @Test
@@ -43,16 +44,16 @@ public class AccountTypeTest {
     }
 
     @Test
-    public void setAccountStatus() {
+    public void setAccountType() {
 
         //Arrange
-        AccountStatus newAccount = new AccountStatus();
+        AccountType newAccountType = new AccountType();
 
         //Act
-        newAccount.setAccountStatus(accountStatus);
+        newAccountType.setAccountType(accountType);
 
         //Assert
-        assertEquals(accountStatus, newAccount.getAccountStatus());
+        assertEquals(accountType, newAccountType.getAccountType());
     }
 
     @Test

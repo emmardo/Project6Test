@@ -20,6 +20,10 @@ public class ConnectionTest {
 
     private Transaction transaction = new Transaction();
 
+    private ConnectionListElement connectionListElement = new ConnectionListElement();
+
+    private List<ConnectionListElement> connectionListElements = new ArrayList<>();
+
     @Test
     public void parameterizedConstructor() {
 
@@ -83,5 +87,20 @@ public class ConnectionTest {
 
         //Assert
         assertEquals(transactions, newConnection.getTransactions());
+    }
+
+    @Test
+    public void setConnectionListElements() {
+
+        //Arrange
+        Connection newConnection = new Connection();
+
+        connectionListElements.add(connectionListElement);
+
+        //Act
+        newConnection.setConnectionListElements(connectionListElements);
+
+        //Assert
+        assertEquals(connectionListElements, newConnection.getConnectionListElements());
     }
 }

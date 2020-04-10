@@ -30,6 +30,10 @@ public class AccountTest {
 
     private List<Iban> ibans = new ArrayList<>();
 
+    private ConnectionListElement connectionListElement = new ConnectionListElement();
+
+    private List<ConnectionListElement> connectionListElements = new ArrayList<>();
+
 
     @Test
     public void parameterizedConstructor() {
@@ -137,5 +141,20 @@ public class AccountTest {
 
         //Assert
         assertEquals(ibans, newAccount.getIbans());
+    }
+
+    @Test
+    public void setConnectionListElements() {
+
+        //Arrange
+        Account newAccount = new Account();
+
+        connectionListElements.add(connectionListElement);
+
+        //Act
+        newAccount.setConnectionListElements(connectionListElements);
+
+        //Assert
+        assertEquals(connectionListElements, newAccount.getConnectionListElements());
     }
 }
