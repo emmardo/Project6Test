@@ -11,7 +11,6 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.transaction.Transactional;
 
 @RestController
-@RequestMapping("/")
 @Transactional
 public class HomeController {
 
@@ -32,9 +31,10 @@ public class HomeController {
     }
 
     @GetMapping("/register")
-    public ModelAndView register() {
+    public ModelAndView register(@ModelAttribute("user")User user) {
 
         ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject(user);
         modelAndView.setViewName("register");
         return modelAndView;
     }
@@ -42,7 +42,7 @@ public class HomeController {
     @PostMapping("/register")
     public ModelAndView registerUser(@ModelAttribute("user")User user) {
 
-        userService.createUserByRole(user.getEmail(),
+        userService.createUserByRole(user.getUser(),
                 new BCryptPasswordEncoder().encode(user.getPassword()), "Regular");
 
         RedirectView redirectView = new RedirectView();

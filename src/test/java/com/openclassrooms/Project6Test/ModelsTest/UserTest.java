@@ -24,6 +24,8 @@ public class UserTest {
 
     private Date updatedAt = new Date();
 
+    private boolean active = true;
+
     private Account account = new Account();
 
     private Connection connection = new Connection();
@@ -116,6 +118,19 @@ public class UserTest {
 
         //Assert
         assertEquals(updatedAt, newUser.getUpdatedAt());
+    }
+
+    @Test
+    public void setActive() {
+
+        //Arrange
+        User newUser = new User();
+
+        //Act
+        newUser.setActive(active);
+
+        //Assert
+        assertEquals(active, newUser.getActive());
     }
 
     @Test

@@ -29,6 +29,8 @@ public class TransactionTest {
 
     private String origin = "";
 
+    private String description = "";
+
     @Test
     public void parameterizedConstructor() {
 
@@ -130,5 +132,18 @@ public class TransactionTest {
 
         //Assert
         assertEquals(origin, newTransaction.getOrigin());
+    }
+
+    @Test
+    public void setDescription() {
+
+        //Arrange
+        Transaction newTransaction = new Transaction();
+
+        //Act
+        newTransaction.setDescription(description);
+
+        //Assert
+        assertEquals(description, newTransaction.getDescription());
     }
 }

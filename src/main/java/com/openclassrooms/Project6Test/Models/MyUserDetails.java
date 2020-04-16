@@ -15,6 +15,7 @@ public class MyUserDetails implements UserDetails {
     private List<GrantedAuthority> authorities;
 
     public MyUserDetails(User user, Role role) {
+
         this.user = user;
         this.authorities = Arrays.asList(new SimpleGrantedAuthority(role.getRole()));
     }
@@ -31,26 +32,26 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return user.getUser();
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return user.isActive();
+        return user.getActive();
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return user.isActive();
+        return user.getActive();
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return user.isActive();
+        return user.getActive();
     }
 
     @Override
     public boolean isEnabled() {
-        return user.isActive();
+        return user.getActive();
     }
 }

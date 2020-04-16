@@ -26,11 +26,14 @@ public class IbanService {
 
     public void createIban(String email, String iban) {
 
-        Account account = accountRepository.findAccountByUserEmail(email);
+        if(ibanRepository.findByAccount_UserEmail(email).stream().noneMatch(i -> i.getIbanString().equals(iban))) {
 
-        Iban newIban = new Iban(account, iban);
+            Account account = accountRepository.findAccountByUserEmail(email);
 
-        ibanRepository.save(newIban);
+            Iban newIban = new Iban(account, iban);
+
+            ibanRepository.save(newIban);
+        }
     }
 
 

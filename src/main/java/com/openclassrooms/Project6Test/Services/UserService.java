@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.Arrays;
 
 @Service
@@ -48,13 +49,13 @@ public class UserService {
 
 
     public void createUserByRole(String email, String password, String userRole) {
+
         if(!userAccountExistenceValidatorByEmail(email) && userRoleValidator(userRole)
-            && (password != null && !password.isEmpty())) {
+            && (password != null && !password.equals(""))) {
 
             entityTypesExistenceChecker();
 
-            User user;
-            user = new User(email, password, roleRepository.findRoleByRole(userRole));
+            User user = new User(email, password, roleRepository.findRoleByRole(userRole));
 
             userRepository.save(user);
 
@@ -92,9 +93,15 @@ public class UserService {
 
     public User getUserFromAuthentication(Authentication authentication) {
 
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User user = null;
 
-        return getUserByEmail(userDetails.getUsername());
+        if(authentication.getName() != null) {
+
+            String userEmail = authentication.getName();
+
+            user =  getUserByEmail(userEmail);
+        }
+        return user;
     }
 
 
@@ -102,9 +109,9 @@ public class UserService {
 
         boolean value = false;
 
-        if(email != null || !email.isEmpty()) {
+        if(email != null || !email.equals("")) {
 
-            if(userRepository.findUserByEmail(email)!= null) {
+            if(userRepository.findUserByEmail(email) != null) {
 
                 value = true;
             }
@@ -118,7 +125,7 @@ public class UserService {
 
         boolean value = false;
 
-        if(role != null || !role.isEmpty()) {
+        if(role != null || !role.equals("")) {
 
             if(Arrays.asList("Company", "Admin", "Regular").contains(role)) {
 

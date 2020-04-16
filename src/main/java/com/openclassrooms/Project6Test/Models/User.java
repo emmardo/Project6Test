@@ -24,7 +24,7 @@ public class User {
     private Role role;
 
     @Email
-    private String email;
+    private String user;
 
     private String password;
 
@@ -50,9 +50,9 @@ public class User {
     public User() {
     }
 
-    public User(String email, String password, Role role) {
+    public User(String user, String password, Role role) {
 
-        this.email = email;
+        this.user = user;
         this.password = password;
         this.role = role;
     }
@@ -73,12 +73,12 @@ public class User {
         this.role = role;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUser() {
+        return user;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUser(String user) {
+        this.user = user;
     }
 
     public String getPassword() {
@@ -121,7 +121,7 @@ public class User {
         this.connection = connection;
     }
 
-    public boolean isActive() {
+    public boolean getActive() {
         return active;
     }
 
