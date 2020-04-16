@@ -44,7 +44,7 @@ public class UserController {
             List<TransactionDTO> dtos = new ArrayList<>();
 
             List<Transaction> transactions = transactionService.getAUsersTransactionsByEmail(
-                    userService.getUserFromAuthentication(authentication).getUser());
+                    userService.getUserFromAuthentication(authentication).getEmail());
 
             if(userService.getUserFromAuthentication(authentication).getRole().getRole().equals("Company")
                     && !transactionRepository.findAll().stream()
@@ -65,7 +65,7 @@ public class UserController {
 
                         dto.setAmount(transaction.getMoneyAmount());
 
-                        dto.setConnectionEmail(transaction.getAccount().getUser().getUser());
+                        dto.setConnectionEmail(transaction.getAccount().getUser().getEmail());
 
                         dtos.add(dto);
 
@@ -106,7 +106,7 @@ public class UserController {
 
                     }else{
 
-                        dto.setConnectionEmail(transaction.getConnection().getUser().getUser());
+                        dto.setConnectionEmail(transaction.getConnection().getUser().getEmail());
                     }
 
                     dtos.add(dto);
@@ -138,7 +138,7 @@ public class UserController {
     public ModelAndView transferPost(@ModelAttribute("request")TransactionDTO request, Authentication authentication) {
 
         transactionService.createTransactionByTransactionType(
-                "Regular", userService.getUserFromAuthentication(authentication).getUser(),
+                "Regular", userService.getUserFromAuthentication(authentication).getEmail(),
                 request.getAmount(), request.getConnectionEmail(), request.getDescription());
 
         RedirectView redirectView = new RedirectView();
@@ -154,10 +154,10 @@ public class UserController {
 
         if(authentication != null){
 
-            List<Iban> ibans = ibanService.getAllIbansByEmail(userService.getUserFromAuthentication(authentication).getUser());
+            List<Iban> ibans = ibanService.getAllIbansByEmail(userService.getUserFromAuthentication(authentication).getEmail());
 
             List<String> connectionsEmails = connectionListElementService.getAUsersConnectionsEmailsByUserEmail(
-                    userService.getUserFromAuthentication(authentication).getUser());
+                    userService.getUserFromAuthentication(authentication).getEmail());
 
             modelAndView.setViewName("profile");
             modelAndView.addObject("user", userService.getUserFromAuthentication(authentication));
@@ -202,8 +202,8 @@ public class UserController {
     public ModelAndView addConnection(@ModelAttribute("connectionListElement") ConnectionListElement connectionListElement,
                                       Authentication authentication) {
 
-        connectionListElementService.createConnectionListElement(userService.getUserFromAuthentication(authentication).getUser(),
-                connectionListElement.getConnection().getUser().getUser());
+        connectionListElementService.createConnectionListElement(userService.getUserFromAuthentication(authentication).getEmail(),
+                connectionListElement.getConnection().getUser().getEmail());
 
         RedirectView redirectView = new RedirectView();
         redirectView.setUrl("/user/profile");
@@ -239,7 +239,7 @@ public class UserController {
         User user = userService.getUserFromAuthentication(authentication);
 
         transactionService.createTransactionByTransactionType(
-                "TopUp", user.getUser(), transaction.getMoneyAmount(), transaction.getOrigin(),
+                "TopUp", user.getEmail(), transaction.getMoneyAmount(), transaction.getOrigin(),
                 "Top Up");
 
         RedirectView redirectView = new RedirectView();
@@ -271,7 +271,7 @@ public class UserController {
     @PostMapping("/user/addIban")
     public ModelAndView addIbanPost(@RequestParam String ibanString, Authentication authentication) {
 
-        ibanService.createIban(userService.getUserFromAuthentication(authentication).getUser(), ibanString);
+        ibanService.createIban(userService.getUserFromAuthentication(authentication).getEmail(), ibanString);
 
         RedirectView redirectView = new RedirectView();
         redirectView.setUrl("/user/addIban");
@@ -307,7 +307,7 @@ public class UserController {
                                        Authentication authentication) {
 
         transactionService.createTransactionByTransactionType(
-                "Withdrawal", userService.getUserFromAuthentication(authentication).getUser(),
+                "Withdrawal", userService.getUserFromAuthentication(authentication).getEmail(),
                 Float.parseFloat(moneyAmount), iban, "Withdrawal");
 
         RedirectView redirectView = new RedirectView();

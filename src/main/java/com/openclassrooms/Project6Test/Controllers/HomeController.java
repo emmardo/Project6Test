@@ -42,7 +42,7 @@ public class HomeController {
     @PostMapping("/register")
     public ModelAndView registerUser(@ModelAttribute("user")User user) {
 
-        userService.createUserByRole(user.getUser(),
+        userService.createUserByRole(user.getEmail(),
                 new BCryptPasswordEncoder().encode(user.getPassword()), "Regular");
 
         RedirectView redirectView = new RedirectView();
