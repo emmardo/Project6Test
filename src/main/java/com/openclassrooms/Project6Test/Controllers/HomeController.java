@@ -4,11 +4,13 @@ import com.openclassrooms.Project6Test.Models.*;
 import com.openclassrooms.Project6Test.Services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 @RestController
 @Transactional
@@ -40,15 +42,34 @@ public class HomeController {
     }
 
     @PostMapping("/register")
-    public ModelAndView registerUser(@ModelAttribute("user")User user) {
+    public ModelAndView registerUser(@Valid @ModelAttribute("user")User user, BindingResult result) {
 
-        userService.createUserByRole(user.getEmail(),
-                new BCryptPasswordEncoder().encode(user.getPassword()), "Regular");
-
+        ModelAndView modelAndView = new ModelAndView();
         RedirectView redirectView = new RedirectView();
-        redirectView.setUrl("/login");
 
-        return new ModelAndView(redirectView);
+        if(user == null || user.getEmail().equals("") || user.getEmail().length() < 7 || user.getEmail().length() > 50
+                || user.getPassword().equals("") || user.getPassword().length() < 2 ) {
+
+            result.reject("error.login");
+        }
+
+        if (!result.hasErrors()) {
+
+            userService.createUserByRole(user.getEmail(),
+                    new BCryptPasswordEncoder().encode(user.getPassword()), "Regular");
+
+            redirectView.setUrl("/login");
+            modelAndView.setView(redirectView);
+
+        } else {
+
+            redirectView.setUrl("/register");
+            modelAndView.setView(redirectView);
+            modelAndView.addObject("errorMessage", "Email or Password Invalid");
+            modelAndView.addObject("bindingResult", result);
+        }
+
+        return modelAndView;
     }
 
     @GetMapping("/login")

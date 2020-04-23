@@ -11,15 +11,12 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -82,9 +79,8 @@ public class HomeControllerTest {
         mockMvc.perform(get("/register")).andExpect(status().isOk());
     }
 
-    /*@WithMockUser(value = "abc@abc.com", password = "123456")*/
     @Test
-    public void registerPostRequest() throws Exception {
+    public void registerPostRequestSucces() throws Exception {
 
         //Arrange
         String userEmail = "abc@abc.com";
@@ -92,6 +88,9 @@ public class HomeControllerTest {
         String regularString = "Regular";
         String activeString = "Active";
 
+        User user = new User();
+        user.setEmail(userEmail);
+        user.setPassword(password);
         Role role = new Role();
         role.setRole(regularString);
         ConnectionType connectionType = new ConnectionType();
@@ -111,8 +110,49 @@ public class HomeControllerTest {
 
         when(accountStatusRepository.findAccountStatusByAccountStatus(activeString)).thenReturn(accountStatus);
 
-        mockMvc.perform(formLogin("/register").user(userEmail).password(password))
-                .andExpect(status().isOk()).andExpect(redirectedUrl("/login"));
+        mockMvc.perform(post("/register").queryParam("email", userEmail).queryParam("password", password))
+                .andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/login"));
 
+    }
+
+    @Test
+    public void registerPostRequestFailure() throws Exception {
+
+        //Arrange
+        String userEmail = "1";
+        String password = "11";
+        String regularString = "Regular";
+        String activeString = "Active";
+
+        User user = new User();
+        user.setEmail(userEmail);
+        user.setPassword(password);
+        Role role = new Role();
+        role.setRole(regularString);
+        ConnectionType connectionType = new ConnectionType();
+        connectionType.setConnectionType(regularString);
+        AccountType accountType = new AccountType();
+        accountType.setAccountType(regularString);
+        AccountStatus accountStatus = new AccountStatus();
+        accountStatus.setAccountStatus(activeString);
+
+        when(userRepository.findUserByEmail(userEmail)).thenReturn(null);
+
+        when(roleRepository.findRoleByRole(regularString)).thenReturn(role);
+
+        when(connectionTypeRepository.findConnectionTypeByConnectionType(regularString)).thenReturn(connectionType);
+
+        when(accountTypeRepository.findAccountTypeByAccountType(regularString)).thenReturn(accountType);
+
+        when(accountStatusRepository.findAccountStatusByAccountStatus(activeString)).thenReturn(accountStatus);
+
+        mockMvc.perform(post("/register").queryParam("email", userEmail).queryParam("password", password))
+                .andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/register"));
+    }
+
+    @Test
+    public void login() throws Exception {
+
+        mockMvc.perform(get("/login")).andExpect(status().isOk());
     }
 }

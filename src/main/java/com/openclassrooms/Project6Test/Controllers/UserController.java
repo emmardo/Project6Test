@@ -5,10 +5,13 @@ import com.openclassrooms.Project6Test.Repositories.TransactionRepository;
 import com.openclassrooms.Project6Test.Services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -148,9 +151,11 @@ public class UserController {
     }
 
     @GetMapping("/user/profile")
-    public ModelAndView profile(Authentication authentication) {
+    public ModelAndView profile() {
 
         ModelAndView modelAndView = new ModelAndView();
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if(authentication != null){
 
@@ -317,11 +322,13 @@ public class UserController {
     }
 
     @GetMapping("/user/contact")
-    public ModelAndView contact(Authentication authentication) {
+    public ModelAndView contact() {
 
         ModelAndView modelAndView = new ModelAndView();
 
-        if(authentication != null) {
+        /*SecurityContext securityContext = SecurityContextHolder.getContext();*/
+
+        if(SecurityContextHolder.getContext().getAuthentication() != null) {
 
             modelAndView.setViewName("contact");
 
