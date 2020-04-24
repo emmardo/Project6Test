@@ -38,11 +38,15 @@ public class UserController {
     }
 
     @GetMapping("/user/transfer")
-    public ModelAndView transferGet(@ModelAttribute("user") User user, Authentication authentication) {
+    public ModelAndView transferGet(@ModelAttribute("user") User user) {
 
         ModelAndView modelAndView = new ModelAndView();
 
-        if(authentication != null) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Object principal = authentication.getPrincipal();
+
+        if(!principal.equals("anonymousUser")) {
 
             List<TransactionDTO> dtos = new ArrayList<>();
 
@@ -138,16 +142,32 @@ public class UserController {
     }
 
     @PostMapping("/user/transfer")
-    public ModelAndView transferPost(@ModelAttribute("request")TransactionDTO request, Authentication authentication) {
+    public ModelAndView transferPost(@ModelAttribute("request")TransactionDTO request) {
 
-        transactionService.createTransactionByTransactionType(
-                "Regular", userService.getUserFromAuthentication(authentication).getEmail(),
-                request.getAmount(), request.getConnectionEmail(), request.getDescription());
+        ModelAndView modelAndView = new ModelAndView();
 
-        RedirectView redirectView = new RedirectView();
-        redirectView.setUrl("/user/profile");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        return new ModelAndView(redirectView);
+        Object principal = authentication.getPrincipal();
+
+        if(!principal.equals("anonymousUser")) {
+
+            transactionService.createTransactionByTransactionType(
+                    "Regular", userService.getUserFromAuthentication(authentication).getEmail(),
+                    request.getAmount(), request.getConnectionEmail(), request.getDescription());
+
+            RedirectView redirectView = new RedirectView();
+            redirectView.setUrl("/user/profile");
+
+            modelAndView.setView(redirectView);
+        }else{
+
+            RedirectView redirectView = new RedirectView();
+            redirectView.setUrl("/login");
+
+            modelAndView.setView(redirectView);
+        }
+        return modelAndView;
     }
 
     @GetMapping("/user/profile")
@@ -157,7 +177,9 @@ public class UserController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if(authentication != null){
+        Object principal = authentication.getPrincipal();
+
+        if(!principal.equals("anonymousUser")) {
 
             List<Iban> ibans = ibanService.getAllIbansByEmail(userService.getUserFromAuthentication(authentication).getEmail());
 
@@ -176,18 +198,17 @@ public class UserController {
 
             modelAndView.setView(redirectView);
         }
-
-
         return modelAndView;
     }
 
     @GetMapping("/user/addConnection")
-    public ModelAndView addConnectionGet(@ModelAttribute("connectionListElement") ConnectionListElement connectionListElement,
-                                         Authentication authentication) {
+    public ModelAndView addConnectionGet(@ModelAttribute("connectionListElement") ConnectionListElement connectionListElement) {
 
         ModelAndView modelAndView = new ModelAndView();
 
-        if(authentication != null) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if(!principal.equals("anonymousUser")) {
 
             modelAndView.setViewName("addConnection");
             modelAndView.addObject("connectionListElement", connectionListElement);
@@ -199,29 +220,46 @@ public class UserController {
 
             modelAndView.setView(redirectView);
         }
-
         return modelAndView;
     }
 
     @PostMapping("/user/addConnection")
-    public ModelAndView addConnection(@ModelAttribute("connectionListElement") ConnectionListElement connectionListElement,
-                                      Authentication authentication) {
-
-        connectionListElementService.createConnectionListElement(userService.getUserFromAuthentication(authentication).getEmail(),
-                connectionListElement.getConnection().getUser().getEmail());
-
-        RedirectView redirectView = new RedirectView();
-        redirectView.setUrl("/user/profile");
-
-        return new ModelAndView(redirectView);
-    }
-
-    @GetMapping("/user/addMoney")
-    public ModelAndView addMoneyGet(@ModelAttribute("transaction") Transaction transaction, Authentication authentication) {
+    public ModelAndView addConnection(@ModelAttribute("connectionListElement") ConnectionListElement connectionListElement) {
 
         ModelAndView modelAndView = new ModelAndView();
 
-        if(authentication != null) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Object principal = authentication.getPrincipal();
+
+        if(!principal.equals("anonymousUser")) {
+
+            connectionListElementService.createConnectionListElement(
+                    userService.getUserFromAuthentication(authentication).getEmail(),
+                    connectionListElement.getConnection().getUser().getEmail());
+
+            RedirectView redirectView = new RedirectView();
+            redirectView.setUrl("/user/profile");
+
+            modelAndView.setView(redirectView);
+        }else{
+
+            RedirectView redirectView = new RedirectView();
+            redirectView.setUrl("/login");
+
+            modelAndView.setView(redirectView);
+        }
+        return modelAndView;
+    }
+
+    @GetMapping("/user/addMoney")
+    public ModelAndView addMoneyGet(@ModelAttribute("transaction") Transaction transaction) {
+
+        ModelAndView modelAndView = new ModelAndView();
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if(!principal.equals("anonymousUser")) {
 
             modelAndView.setViewName("addMoney");
             modelAndView.addObject("transaction", transaction);
@@ -233,32 +271,49 @@ public class UserController {
 
             modelAndView.setView(redirectView);
         }
-
         return modelAndView;
     }
 
     @PostMapping("/user/addMoney")
-    public ModelAndView addMoneyPost(@ModelAttribute("transaction")Transaction transaction,
-                                     Authentication authentication) {
-
-        User user = userService.getUserFromAuthentication(authentication);
-
-        transactionService.createTransactionByTransactionType(
-                "TopUp", user.getEmail(), transaction.getMoneyAmount(), transaction.getOrigin(),
-                "Top Up");
-
-        RedirectView redirectView = new RedirectView();
-        redirectView.setUrl("/user/profile");
-
-        return new ModelAndView(redirectView);
-    }
-
-    @GetMapping("/user/addIban")
-    public ModelAndView addIbanGet(Authentication authentication) {
+    public ModelAndView addMoneyPost(@ModelAttribute("transaction")Transaction transaction) {
 
         ModelAndView modelAndView = new ModelAndView();
 
-        if(authentication != null) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Object principal = authentication.getPrincipal();
+
+        if(!principal.equals("anonymousUser")) {
+
+            User user = userService.getUserFromAuthentication(authentication);
+
+            transactionService.createTransactionByTransactionType(
+                    "TopUp", user.getEmail(), transaction.getMoneyAmount(), transaction.getOrigin(),
+                    "Top Up");
+
+            RedirectView redirectView = new RedirectView();
+            redirectView.setUrl("/user/profile");
+
+            modelAndView.setView(redirectView);
+
+        }else{
+
+            RedirectView redirectView = new RedirectView();
+            redirectView.setUrl("/login");
+
+            modelAndView.setView(redirectView);
+        }
+        return modelAndView;
+    }
+
+    @GetMapping("/user/addIban")
+    public ModelAndView addIbanGet() {
+
+        ModelAndView modelAndView = new ModelAndView();
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if(!principal.equals("anonymousUser")) {
 
             modelAndView.setViewName("addIban");
 
@@ -269,30 +324,51 @@ public class UserController {
 
             modelAndView.setView(redirectView);
         }
-
         return modelAndView;
     }
 
     @PostMapping("/user/addIban")
-    public ModelAndView addIbanPost(@RequestParam String ibanString, Authentication authentication) {
-
-        ibanService.createIban(userService.getUserFromAuthentication(authentication).getEmail(), ibanString);
-
-        RedirectView redirectView = new RedirectView();
-        redirectView.setUrl("/user/addIban");
-
-        return new ModelAndView(redirectView);
-    }
-
-    @GetMapping("/user/withdrawal")
-    public ModelAndView withdrawalGet(Authentication authentication) {
+    public ModelAndView addIbanPost(@RequestParam String ibanString) {
 
         ModelAndView modelAndView = new ModelAndView();
 
-        if(authentication != null) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Object principal = authentication.getPrincipal();
+
+        if(!principal.equals("anonymousUser")) {
+
+            ibanService.createIban(userService.getUserFromAuthentication(authentication).getEmail(), ibanString);
+
+            RedirectView redirectView = new RedirectView();
+            redirectView.setUrl("/user/addIban");
+
+            modelAndView.setView(redirectView);
+
+        }else{
+
+            RedirectView redirectView = new RedirectView();
+            redirectView.setUrl("/login");
+
+            modelAndView.setView(redirectView);
+        }
+        return modelAndView;
+    }
+
+    @GetMapping("/user/withdrawal")
+    public ModelAndView withdrawalGet() {
+
+        ModelAndView modelAndView = new ModelAndView();
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Object principal = authentication.getPrincipal();
+
+        if(!principal.equals("anonymousUser")) {
 
             modelAndView.setViewName("withdrawal");
-            modelAndView.addObject("ibans", userService.getUserFromAuthentication(authentication).getAccount().getIbans());
+            modelAndView.addObject("ibans",
+                    userService.getUserFromAuthentication(authentication).getAccount().getIbans());
             modelAndView.addObject("request", new WithdrawalDTO());
 
         }else{
@@ -302,23 +378,38 @@ public class UserController {
 
             modelAndView.setView(redirectView);
         }
-
         return modelAndView;
     }
 
     @PostMapping("/user/withdrawal")
     public ModelAndView withdrawalPost(@ModelAttribute("moneyAmount") String moneyAmount,
-                                       @ModelAttribute("account") String iban,
-                                       Authentication authentication) {
+                                       @ModelAttribute("account") String iban) {
 
-        transactionService.createTransactionByTransactionType(
-                "Withdrawal", userService.getUserFromAuthentication(authentication).getEmail(),
-                Float.parseFloat(moneyAmount), iban, "Withdrawal");
+        ModelAndView modelAndView = new ModelAndView();
 
-        RedirectView redirectView = new RedirectView();
-        redirectView.setUrl("/user/profile");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        return new ModelAndView(redirectView);
+        Object principal = authentication.getPrincipal();
+
+        if(!principal.equals("anonymousUser")) {
+
+            transactionService.createTransactionByTransactionType(
+                    "Withdrawal", userService.getUserFromAuthentication(authentication).getEmail(),
+                    Float.parseFloat(moneyAmount), iban, "Withdrawal");
+
+            RedirectView redirectView = new RedirectView();
+            redirectView.setUrl("/user/profile");
+
+            modelAndView.setView(redirectView);
+
+        }else{
+
+            RedirectView redirectView = new RedirectView();
+            redirectView.setUrl("/login");
+
+            modelAndView.setView(redirectView);
+        }
+        return modelAndView;
     }
 
     @GetMapping("/user/contact")
@@ -326,9 +417,9 @@ public class UserController {
 
         ModelAndView modelAndView = new ModelAndView();
 
-        /*SecurityContext securityContext = SecurityContextHolder.getContext();*/
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if(SecurityContextHolder.getContext().getAuthentication() != null) {
+        if(!principal.equals("anonymousUser")) {
 
             modelAndView.setViewName("contact");
 
@@ -339,7 +430,6 @@ public class UserController {
 
             modelAndView.setView(redirectView);
         }
-
         return modelAndView;
     }
 }
