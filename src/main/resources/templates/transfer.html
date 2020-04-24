@@ -54,10 +54,10 @@
             </div>
         </div>
         <div class="subRowsDivs">
-            <form name="form" th:action="@{/user/transfer}" th:object="${request}" method="post">
+            <form name="form" th:action="@{/user/transfer}" method="post">
                 <div id="subRow2">
                     <div>
-                        <select id="connectionsSelect" th:field="*{connectionEmail}" th:remove="all-but-first">
+                        <select id="connectionsSelect" th:name="email" name="email" th:remove="all-but-first">
                             <option th:each="connectionListElement : ${user.account.connectionListElements}"
                                     th:text="${connectionListElement.connection.user.email}"
                                     th:value="${connectionListElement.connection.user.email}">a@a.co.uk</option>
@@ -67,11 +67,11 @@
                         </select>
                     </div>
                     <div>
-                        <input type="text" id="amount" name="amount" th:value="*{amount}"
+                        <input type="text" id="amount" th:name="amount" name="amount"
                                placeholder="How much?"/>
                     </div>
                     <div>
-                        <input type="text" id="description" name="description" th:value="*{description}"
+                        <input type="text" id="description" th:name="description" name="description"
                                placeholder="Add a Description"/>
                     </div>
                     <div>

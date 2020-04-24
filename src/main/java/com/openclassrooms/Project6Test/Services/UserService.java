@@ -95,7 +95,9 @@ public class UserService {
 
         User user = null;
 
-        if(authentication.getName() != null) {
+        Object principal = authentication.getPrincipal();
+
+        if(!principal.equals("anonymousUser")) {
 
             String userEmail = authentication.getName();
 

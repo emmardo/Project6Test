@@ -44,7 +44,7 @@
         </div>
     </div>
     <f class="mainDivRows" id="mainRowDiv">
-        <form name="form" th:action="@{/user/addConnection}" th:object="${connectionListElement}" method="post">
+        <form name="form" th:action="@{/user/addConnection}" th:object="${user}" method="post">
             <div>
                 <h3>Add your Buddy!</h3>
             </div>
@@ -53,7 +53,7 @@
                     Registered with Us</h4>
             </div>
             <div>
-                <input 🤔🤔class="formElement" type="text" id="username" name="email" th:field="*{connection.user.email}"
+                <input 🤔🤔class="formElement" type="text" id="username" name="email" th:field="*{email}"
                        placeholder="Your Buddy's Email here..."/>
             </div>
             <br>

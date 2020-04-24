@@ -142,7 +142,8 @@ public class UserController {
     }
 
     @PostMapping("/user/transfer")
-    public ModelAndView transferPost(@ModelAttribute("request")TransactionDTO request) {
+    public ModelAndView transferPost(@RequestParam("email") String email, @RequestParam("amount") String amount,
+                                     @RequestParam("description") String description) {
 
         ModelAndView modelAndView = new ModelAndView();
 
@@ -154,7 +155,7 @@ public class UserController {
 
             transactionService.createTransactionByTransactionType(
                     "Regular", userService.getUserFromAuthentication(authentication).getEmail(),
-                    request.getAmount(), request.getConnectionEmail(), request.getDescription());
+                    Float.parseFloat(amount), email, description);
 
             RedirectView redirectView = new RedirectView();
             redirectView.setUrl("/user/profile");
@@ -181,13 +182,14 @@ public class UserController {
 
         if(!principal.equals("anonymousUser")) {
 
-            List<Iban> ibans = ibanService.getAllIbansByEmail(userService.getUserFromAuthentication(authentication).getEmail());
+            String email = userService.getUserFromAuthentication(authentication).getEmail();
 
-            List<String> connectionsEmails = connectionListElementService.getAUsersConnectionsEmailsByUserEmail(
-                    userService.getUserFromAuthentication(authentication).getEmail());
+            List<Iban> ibans = ibanService.getAllIbansByEmail(email);
+
+            List<String> connectionsEmails = connectionListElementService.getAUsersConnectionsEmailsByUserEmail(email);
 
             modelAndView.setViewName("profile");
-            modelAndView.addObject("user", userService.getUserFromAuthentication(authentication));
+            modelAndView.addObject("user", userService.getUserByEmail(email));
             modelAndView.addObject("ibans", ibans);
             modelAndView.addObject("connectionsEmails", connectionsEmails);
 
@@ -202,7 +204,7 @@ public class UserController {
     }
 
     @GetMapping("/user/addConnection")
-    public ModelAndView addConnectionGet(@ModelAttribute("connectionListElement") ConnectionListElement connectionListElement) {
+    public ModelAndView addConnectionGet(@ModelAttribute("user") User user) {
 
         ModelAndView modelAndView = new ModelAndView();
 
@@ -211,7 +213,7 @@ public class UserController {
         if(!principal.equals("anonymousUser")) {
 
             modelAndView.setViewName("addConnection");
-            modelAndView.addObject("connectionListElement", connectionListElement);
+            modelAndView.addObject("user", user);
 
         }else{
 
@@ -224,7 +226,7 @@ public class UserController {
     }
 
     @PostMapping("/user/addConnection")
-    public ModelAndView addConnection(@ModelAttribute("connectionListElement") ConnectionListElement connectionListElement) {
+    public ModelAndView addConnectionPost(@ModelAttribute("user") User user) {
 
         ModelAndView modelAndView = new ModelAndView();
 
@@ -236,7 +238,7 @@ public class UserController {
 
             connectionListElementService.createConnectionListElement(
                     userService.getUserFromAuthentication(authentication).getEmail(),
-                    connectionListElement.getConnection().getUser().getEmail());
+                    user.getEmail());
 
             RedirectView redirectView = new RedirectView();
             redirectView.setUrl("/user/profile");
@@ -328,7 +330,7 @@ public class UserController {
     }
 
     @PostMapping("/user/addIban")
-    public ModelAndView addIbanPost(@RequestParam String ibanString) {
+    public ModelAndView addIbanPost(@RequestParam("ibanString") String ibanString) {
 
         ModelAndView modelAndView = new ModelAndView();
 
