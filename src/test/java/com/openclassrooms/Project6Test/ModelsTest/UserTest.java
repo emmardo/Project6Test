@@ -3,9 +3,7 @@ package com.openclassrooms.Project6Test.ModelsTest;
 import com.openclassrooms.Project6Test.Models.*;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 

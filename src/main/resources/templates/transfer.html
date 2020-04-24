@@ -58,7 +58,7 @@
                 <div id="subRow2">
                     <div>
                         <select id="connectionsSelect" th:name="email" name="email" th:remove="all-but-first">
-                            <option th:each="connectionListElement : ${user.account.connectionListElements}"
+                            <option th:each="connectionListElement : ${connectionListElementList}"
                                     th:text="${connectionListElement.connection.user.email}"
                                     th:value="${connectionListElement.connection.user.email}">a@a.co.uk</option>
                             <option >a@a.co.uk</option>

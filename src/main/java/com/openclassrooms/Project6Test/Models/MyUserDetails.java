@@ -17,6 +17,7 @@ public class MyUserDetails implements UserDetails {
     public MyUserDetails(User user, Role role) {
 
         this.user = user;
+
         this.authorities = Arrays.asList(new SimpleGrantedAuthority(role.getRole()));
     }
 

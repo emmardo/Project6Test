@@ -2,15 +2,12 @@ package com.openclassrooms.Project6Test.ControllersTest;
 
 import com.openclassrooms.Project6Test.Models.*;
 import com.openclassrooms.Project6Test.Repositories.*;
-import com.openclassrooms.Project6Test.Services.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -38,28 +35,13 @@ public class HomeControllerTest {
     private RoleRepository roleRepository;
 
     @Mock
-    private AccountRepository accountRepository;
-
-    @Mock
     private AccountTypeRepository accountTypeRepository;
 
     @Mock
     private AccountStatusRepository accountStatusRepository;
 
     @Mock
-    private ConnectionRepository connectionRepository;
-
-    @Mock
     private ConnectionTypeRepository connectionTypeRepository;
-
-    @Mock
-    private TransactionTypeRepository transactionTypeRepository;
-
-    @Mock
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @InjectMocks
-    private UserService userServiceMock;
 
     @Before
     public void MockMvc() {
@@ -70,13 +52,13 @@ public class HomeControllerTest {
     @Test
     public void home() throws Exception {
 
-        mockMvc.perform(get("/")).andExpect(status().isOk());
+        mockMvc.perform(get("/")).andExpect(status().is2xxSuccessful());
     }
 
     @Test
     public void registerGetRequest() throws Exception {
 
-        mockMvc.perform(get("/register")).andExpect(status().isOk());
+        mockMvc.perform(get("/register")).andExpect(status().is2xxSuccessful());
     }
 
     @Test
@@ -110,7 +92,8 @@ public class HomeControllerTest {
 
         when(accountStatusRepository.findAccountStatusByAccountStatus(activeString)).thenReturn(accountStatus);
 
-        mockMvc.perform(post("/register").queryParam("email", userEmail).queryParam("password", password))
+        mockMvc.perform(post("/register").queryParam("email", userEmail)
+                .queryParam("password", password))
                 .andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/login"));
 
     }
@@ -147,7 +130,8 @@ public class HomeControllerTest {
         when(accountStatusRepository.findAccountStatusByAccountStatus(activeString)).thenReturn(accountStatus);
 
         mockMvc.perform(post("/register").queryParam("email", userEmail).queryParam("password", password))
-                .andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/register"));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/register?errorMessage=Email+or+Password+Invalid"));
     }
 
     @Test

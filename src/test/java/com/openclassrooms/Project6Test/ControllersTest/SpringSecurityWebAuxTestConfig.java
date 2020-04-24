@@ -27,10 +27,11 @@ public class SpringSecurityWebAuxTestConfig {
         Role adminRole = new Role("Admin");
         MyUserDetails adminUser = new MyUserDetails(admin, adminRole);
 
-        /*User hacker = new User("hacker@paymybuddy.com", "password", new Role("Hacker"));
-        Role hackerRole = new Role("Hacker");
-        MyUserDetails hackerUser = new MyUserDetails(hacker, hackerRole);*/
+        User company = new User("company@paymybuddy.com", "password", new Role("Company"));
+        company.setActive(true);
+        Role companyRole = new Role("Company");
+        MyUserDetails companyUser = new MyUserDetails(company, companyRole);
 
-        return new InMemoryUserDetailsManager(Arrays.asList(regularUser, adminUser/*, hackerUser*/));
+        return new InMemoryUserDetailsManager(Arrays.asList(regularUser, adminUser, companyUser));
     }
 }

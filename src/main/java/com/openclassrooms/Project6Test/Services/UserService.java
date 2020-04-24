@@ -4,10 +4,8 @@ import com.openclassrooms.Project6Test.Models.*;
 import com.openclassrooms.Project6Test.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.util.Arrays;
 
 @Service

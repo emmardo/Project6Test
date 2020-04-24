@@ -5,13 +5,11 @@ import com.openclassrooms.Project6Test.Repositories.TransactionRepository;
 import com.openclassrooms.Project6Test.Services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,7 +36,7 @@ public class UserController {
     }
 
     @GetMapping("/user/transfer")
-    public ModelAndView transferGet(@ModelAttribute("user") User user) {
+    public ModelAndView transferGet() {
 
         ModelAndView modelAndView = new ModelAndView();
 
@@ -50,10 +48,16 @@ public class UserController {
 
             List<TransactionDTO> dtos = new ArrayList<>();
 
-            List<Transaction> transactions = transactionService.getAUsersTransactionsByEmail(
-                    userService.getUserFromAuthentication(authentication).getEmail());
+            User user = userService.getUserFromAuthentication(authentication);
 
-            if(userService.getUserFromAuthentication(authentication).getRole().getRole().equals("Company")
+            String userEmail = user.getEmail();
+
+            List<ConnectionListElement> connectionListElementList = connectionListElementService
+                    .getConnectionListElementsByUserEmail(userEmail);
+
+            List<Transaction> transactions = transactionService.getAUsersTransactionsByEmail(userEmail);
+
+            if(user.getRole().getRole().equals("Company")
                     && !transactionRepository.findAll().stream()
                     .filter(t -> t.getTransactionType().getTransactionType()
                             .equals("Regular")).collect(Collectors.toList()).isEmpty()) {
@@ -78,13 +82,11 @@ public class UserController {
 
                         modelAndView.setViewName("transfer");
                         modelAndView.addObject("transactions", dtos);
-                        modelAndView.addObject("request", new TransactionDTO());
-                        modelAndView.addObject("user", userService.getUserFromAuthentication(authentication));
+                        modelAndView.addObject("connectionListElementList", connectionListElementList);
                     }
                 }
 
-            } else if(!transactions.isEmpty() &&
-                    !userService.getUserFromAuthentication(authentication).getRole().getRole().equals("Company")) {
+            } else if(!transactions.isEmpty() && !user.getRole().getRole().equals("Company")) {
 
                 for(Transaction transaction : transactions) {
 
@@ -128,7 +130,7 @@ public class UserController {
             modelAndView.setViewName("transfer");
             modelAndView.addObject("transactions", dtos);
             modelAndView.addObject("request", new TransactionDTO());
-            modelAndView.addObject("user", userService.getUserFromAuthentication(authentication));
+            modelAndView.addObject("connectionListElementList", connectionListElementList);
 
         }else{
 
